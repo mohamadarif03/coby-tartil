@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import Sidebar from './Sidebar';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
@@ -91,11 +91,11 @@ function IqraTanwin() {
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm font-medium text-slate-500 mb-8">
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/iqra'); }}>Iqra'</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/iqra' }); }}>Iqra'</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <span className="text-[#006b5c] font-bold">Tanwin</span>
+            <span className="text-[#800000] font-bold">Tanwin</span>
           </nav>
 
           {/* Header */}
@@ -132,7 +132,7 @@ function IqraTanwin() {
               <button
                 key={h.name}
                 onClick={() => { setActiveTab(i); setSelectedExample(null); }}
-                className={`flex-1 py-4 px-4 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+                className={`flex-1 py-4 px-4 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                   activeTab === i 
                     ? `bg-gradient-to-r ${h.color} text-white shadow-lg scale-[1.02]` 
                     : 'text-slate-500 hover:bg-slate-50'
@@ -167,7 +167,7 @@ function IqraTanwin() {
 
                 <button
                   onClick={() => speakArabic(`بـ${active.symbol}`)}
-                  className={`w-full mt-6 py-4 rounded-xl bg-gradient-to-r ${active.color} text-white font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017]`}
+                  className={`w-full mt-6 py-4 rounded-xl bg-gradient-to-r ${active.color} text-white font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700]`}
                   aria-label={`Dengarkan bunyi ${active.name}`}
                 >
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>play_arrow</span>
@@ -205,14 +205,14 @@ function IqraTanwin() {
                       setSelectedExample(i);
                       speakArabic(ex.full);
                     }}
-                    className={`relative bg-white rounded-xl p-6 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 border-2 ${
+                    className={`relative bg-white rounded-xl p-6 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 border-2 ${
                       selectedExample === i ? `${active.textColor.replace('text', 'border')} shadow-lg scale-105` : 'border-transparent hover:border-slate-200'
                     }`}
                     aria-label={`${ex.latin}, klik untuk mendengar`}
                   >
                     {selectedExample === i && (
                       <div className="absolute -top-2 -right-2">
-                        <span className="material-symbols-outlined text-xl text-[#006b5c]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
+                        <span className="material-symbols-outlined text-xl text-[#800000]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
                       </div>
                     )}
                     <span className="font-['Noto_Sans_Arabic'] text-4xl mb-2 text-[#2a2f32]">{ex.full}</span>

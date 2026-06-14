@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import Sidebar from './Sidebar';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
@@ -58,11 +58,11 @@ function IqraSukunTasydid() {
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm font-medium text-slate-500 mb-8">
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/iqra'); }}>Iqra'</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/iqra' }); }}>Iqra'</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <span className="text-[#006b5c] font-bold">Sukun & Tasydid</span>
+            <span className="text-[#800000] font-bold">Sukun & Tasydid</span>
           </nav>
 
           {/* Header */}
@@ -82,7 +82,7 @@ function IqraSukunTasydid() {
           <div className="flex gap-3 mb-10 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
             <button
               onClick={() => { setActiveTab('sukun'); setSelectedItem(null); }}
-              className={`flex-1 py-5 px-6 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+              className={`flex-1 py-5 px-6 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                 activeTab === 'sukun' 
                   ? 'bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-lg scale-[1.02]' 
                   : 'text-slate-500 hover:bg-slate-50'
@@ -99,7 +99,7 @@ function IqraSukunTasydid() {
             </button>
             <button
               onClick={() => { setActiveTab('tasydid'); setSelectedItem(null); }}
-              className={`flex-1 py-5 px-6 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+              className={`flex-1 py-5 px-6 rounded-xl font-bold text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                 activeTab === 'tasydid' 
                   ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg scale-[1.02]' 
                   : 'text-slate-500 hover:bg-slate-50'
@@ -185,7 +185,7 @@ function IqraSukunTasydid() {
                   setSelectedItem(i);
                   speakArabic(ex.arabic);
                 }}
-                className={`relative bg-white rounded-xl p-5 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 border-2 ${
+                className={`relative bg-white rounded-xl p-5 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 border-2 ${
                   selectedItem === i 
                     ? (activeTab === 'sukun' ? 'border-rose-400 shadow-lg scale-105' : 'border-indigo-400 shadow-lg scale-105')
                     : 'border-transparent hover:border-slate-200'
@@ -194,7 +194,7 @@ function IqraSukunTasydid() {
               >
                 {selectedItem === i && (
                   <div className="absolute -top-2 -right-2">
-                    <span className="material-symbols-outlined text-xl text-[#006b5c]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
+                    <span className="material-symbols-outlined text-xl text-[#800000]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
                   </div>
                 )}
                 <span className="font-['Noto_Sans_Arabic'] text-4xl mb-2 text-[#2a2f32]">{ex.arabic}</span>

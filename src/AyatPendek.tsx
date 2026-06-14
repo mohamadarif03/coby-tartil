@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility'; // ADDED
 
@@ -21,24 +21,24 @@ function AyatPendek() {
         <div className="w-full relative z-10">
           {/* Breadcrumbs */}
           <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-sm font-medium opacity-60">
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="material-symbols-outlined text-xs">chevron_right</span>
-            <span className="text-[#006b5c] font-bold">Ayat Pendek</span>
+            <span className="text-[#800000] font-bold">Ayat Pendek</span>
           </nav>
 
           {/* Header Section */}
           <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-black siswa-headline text-[#006b5c] mb-4 tracking-tight">Ayat Pendek</h1>
+            <h1 className="text-4xl md:text-5xl font-black siswa-headline text-[#800000] mb-4 tracking-tight">Ayat Pendek</h1>
             <p className="text-lg md:text-xl text-[#575c60] max-w-2xl">Mulai dari surah terpendek dan paling mudah untuk membangun hafalanmu secara perlahan.</p>
 
             {/* Progress Card */}
             <div className="mt-8 bg-[#ffffff] rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm border border-transparent">
-              <div className="bg-[#006b5c] text-white w-16 h-16 rounded-full flex items-center justify-center shrink-0 shadow-lg shadow-[#006b5c]/20">
+              <div className="bg-[#800000] text-white w-16 h-16 rounded-full flex items-center justify-center shrink-0 shadow-lg shadow-[#800000]/20">
                 <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
               </div>
               <div className="flex-1 w-full">
                 <div className="flex justify-between items-end mb-2">
-                  <span className="siswa-headline font-bold text-[#006b5c] text-xl">Progres Hafalan</span>
+                  <span className="siswa-headline font-bold text-[#800000] text-xl">Progres Hafalan</span>
                   <span className="text-[#6a4800] font-bold">2 dari 10 surah selesai</span>
                 </div>
                 <div className="w-full bg-[#ecf1f6] rounded-full h-4 overflow-hidden">
@@ -51,32 +51,32 @@ function AyatPendek() {
           {/* Surah Grid */}
           <div aria-label="Daftar Surah Pendek" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-32" role="list">
             {/* Item 1: Selesai */}
-            <div aria-label="Surah Al-Kautsar, 3 ayat, Status: Selesai" className="bg-[#ffffff] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0" onClick={() => navigate('/ayat-pendek/al-kautsar')} onKeyDown={(e) => { if (e.key === 'Enter') navigate('/ayat-pendek/al-kautsar'); }}>
+            <div aria-label="Surah Al-Kautsar, 3 ayat, Status: Selesai" className="bg-[#ffffff] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0" onClick={() => navigate({ to: '/ayat-pendek/al-kautsar' })} onKeyDown={(e) => { if (e.key === 'Enter') navigate({ to: '/ayat-pendek/al-kautsar' }); }}>
               <div className="flex justify-between items-start mb-4">
-                <div className="p-3 bg-[#006b5c]/10 text-[#006b5c] rounded-xl">
+                <div className="p-3 bg-[#800000]/10 text-[#800000] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
                 </div>
-                <span className="px-4 py-1 bg-[#006b5c]/10 text-[#006b5c] text-xs font-black uppercase tracking-widest rounded-full">SELESAI</span>
+                <span className="px-4 py-1 bg-[#800000]/10 text-[#800000] text-xs font-black uppercase tracking-widest rounded-full">SELESAI</span>
               </div>
-              <h3 className="text-2xl font-black siswa-headline text-[#006b5c] mb-1">Al-Kautsar</h3>
+              <h3 className="text-2xl font-black siswa-headline text-[#800000] mb-1">Al-Kautsar</h3>
               <p className="text-[#575c60] font-medium mb-4">3 ayat • Makkiyah</p>
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
-                  <div className="bg-[#006b5c] h-full w-full"></div>
+                  <div className="bg-[#800000] h-full w-full"></div>
                 </div>
-                <span className="text-sm font-bold text-[#006b5c]">3/3</span>
+                <span className="text-sm font-bold text-[#800000]">3/3</span>
               </div>
             </div>
 
             {/* Item 2: Sedang dipelajari */}
-            <div aria-label="Surah Al-Asr, 3 ayat, Status: Sedang dipelajari" className="bg-[#ffffff] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0" onClick={() => navigate('/ayat-pendek/al-asr')} onKeyDown={(e) => { if (e.key === 'Enter') navigate('/ayat-pendek/al-asr'); }}>
+            <div aria-label="Surah Al-Asr, 3 ayat, Status: Sedang dipelajari" className="bg-[#ffffff] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0" onClick={() => navigate({ to: '/ayat-pendek/al-asr' })} onKeyDown={(e) => { if (e.key === 'Enter') navigate({ to: '/ayat-pendek/al-asr' }); }}>
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#ffc78e]/30 text-[#6a4800] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>sync</span>
                 </div>
                 <span className="px-4 py-1 bg-[#ffc78e]/30 text-[#6a4800] text-xs font-black uppercase tracking-widest rounded-full">DIPELAJARI</span>
               </div>
-              <h3 className="text-2xl font-black siswa-headline text-[#006b5c] mb-1">Al-Asr</h3>
+              <h3 className="text-2xl font-black siswa-headline text-[#800000] mb-1">Al-Asr</h3>
               <p className="text-[#575c60] font-medium mb-4">3 ayat • Makkiyah</p>
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
@@ -87,7 +87,7 @@ function AyatPendek() {
             </div>
 
             {/* Item 3: Belum dimulai (Locked style) */}
-            <div aria-label="Surah Al-Ikhlas, 4 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0">
+            <div aria-label="Surah Al-Ikhlas, 4 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#ecf1f6] text-[#575c60] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
@@ -99,7 +99,7 @@ function AyatPendek() {
             </div>
 
             {/* Item 4: Belum dimulai */}
-            <div aria-label="Surah Al-Lahab, 5 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0">
+            <div aria-label="Surah Al-Lahab, 5 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#ecf1f6] text-[#575c60] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
@@ -111,7 +111,7 @@ function AyatPendek() {
             </div>
 
             {/* Item 5: Belum dimulai */}
-            <div aria-label="Surah Al-Falaq, 5 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0">
+            <div aria-label="Surah Al-Falaq, 5 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#ecf1f6] text-[#575c60] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
@@ -123,7 +123,7 @@ function AyatPendek() {
             </div>
 
             {/* Item 6: Belum dimulai */}
-            <div aria-label="Surah An-Nasr, 3 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2" role="listitem" tabIndex="0">
+            <div aria-label="Surah An-Nasr, 3 ayat, Status: Terkunci" className="bg-[#ffffff] opacity-70 p-6 rounded-2xl hover:bg-[#ffffff]/50 transition-all cursor-not-allowed shadow-sm border border-transparent hover:border-[#dde3e8] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" role="listitem" tabIndex="0">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#ecf1f6] text-[#575c60] rounded-xl">
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>

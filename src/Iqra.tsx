@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import Sidebar from './Sidebar';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
@@ -104,27 +104,27 @@ function Iqra() {
       <main className="ml-72 p-10 max-w-7xl mx-auto w-full" id="main-content" role="main">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm font-medium text-slate-500 mb-8">
-          <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+          <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
           <span className="material-symbols-outlined text-base">chevron_right</span>
-          <span className="text-[#006b5c] font-bold">Iqra'</span>
+          <span className="text-[#800000] font-bold">Iqra'</span>
         </nav>
 
         {/* Hero Header */}
         <section className="mb-12 relative overflow-hidden">
-          <div className="bg-gradient-to-br from-[#006b5c] via-[#00897b] to-[#00695a] rounded-3xl p-10 md:p-14 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#800000] via-[#00897b] to-[#00695a] rounded-3xl p-10 md:p-14 relative overflow-hidden">
             {/* Decorative Elements */}
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl" aria-hidden="true"></div>
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-[#D4A017]/10 rounded-full blur-3xl" aria-hidden="true"></div>
+            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-[#ffd700]/10 rounded-full blur-3xl" aria-hidden="true"></div>
             <div className="absolute top-0 right-0 w-full h-full hero-pattern opacity-20" aria-hidden="true"></div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex-1">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20">
-                  <span className="material-symbols-outlined text-[#D4A017] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>auto_stories</span>
+                  <span className="material-symbols-outlined text-[#ffd700] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>auto_stories</span>
                   <span className="text-teal-100 font-semibold text-sm tracking-wide">Metode Iqra' Digital</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 font-['Plus_Jakarta_Sans']">
-                  Iqra' <span className="text-[#D4A017]">Interaktif</span>
+                  Iqra' <span className="text-[#ffd700]">Interaktif</span>
                 </h2>
                 <p className="text-teal-100/90 text-lg max-w-lg leading-relaxed">
                   Belajar membaca Al-Qur'an dari dasar dengan metode Iqra' yang sistematis, interaktif, dan menyenangkan.
@@ -157,9 +157,9 @@ function Iqra() {
             {lessons.map((lesson) => (
               <button
                 key={lesson.id}
-                onClick={() => navigate(`/iqra/${lesson.id}`)}
+                onClick={() => navigate({ to: `/iqra/${lesson.id}` })}
                 aria-label={lesson.title}
-                className={`group relative bg-white rounded-2xl p-7 flex flex-col text-left transition-all duration-500 hover:scale-[1.02] ${lesson.hoverShadow} hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 border ${lesson.borderColor} border-opacity-50`}
+                className={`group relative bg-white rounded-2xl p-7 flex flex-col text-left transition-all duration-500 hover:scale-[1.02] ${lesson.hoverShadow} hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 border ${lesson.borderColor} border-opacity-50`}
               >
                 {/* Tag Badge */}
                 <div className="absolute top-4 right-4">
@@ -195,8 +195,8 @@ function Iqra() {
 
                 {/* Mulai Belajar CTA */}
                 <div className="mt-5 pt-5 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#006b5c]">Mulai Belajar</span>
-                  <span className="material-symbols-outlined text-[#006b5c] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
+                  <span className="text-sm font-bold text-[#800000]">Mulai Belajar</span>
+                  <span className="material-symbols-outlined text-[#800000] group-hover:translate-x-1 transition-transform duration-300">arrow_forward</span>
                 </div>
               </button>
             ))}
@@ -227,8 +227,8 @@ function Iqra() {
       </main>
 
       <header className="md:hidden fixed top-0 left-0 w-full z-40 flex justify-between items-center px-6 h-16 bg-[#f3f7fb]/70 dark:bg-slate-900/70 backdrop-blur-lg">
-        <span className="text-2xl font-black text-[#006b5c] tracking-tight font-['Plus_Jakarta_Sans']">CobyTartil</span>
-        <button className="material-symbols-outlined text-[#006b5c]">menu</button>
+        <span className="text-2xl font-black text-[#800000] tracking-tight font-['Plus_Jakarta_Sans']">CobyTartil</span>
+        <button className="material-symbols-outlined text-[#800000]">menu</button>
       </header>
     </div>
   );

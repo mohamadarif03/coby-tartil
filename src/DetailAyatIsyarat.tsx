@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './Sidebar';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import maskot from './assets/maskot.png';
 
 const DetailAyatIsyarat = () => {
     const navigate = useNavigate();
-    const { surah } = useParams();
+    const { surah } = useParams({ from: '/ayat-pendek/isyarat/$surah' });
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");
@@ -75,11 +75,11 @@ const DetailAyatIsyarat = () => {
 
     const handleNext = () => {
         if (!isLast) setCurrentVerse(prev => prev + 1);
-        else navigate('/ayat-pendek');
+        else navigate({ to: '/ayat-pendek' });
     };
 
     const handlePrev = () => {
-        if (isFirst) navigate('/ayat-pendek');
+        if (isFirst) navigate({ to: '/ayat-pendek' });
         else setCurrentVerse(prev => prev - 1);
     };
 
@@ -163,8 +163,8 @@ const DetailAyatIsyarat = () => {
                 setHandsDetected(true);
                 setStatusMsg("✋ Tangan terdeteksi — Lakukan gestur isyarat ayat");
                 for (const landmarks of results.multiHandLandmarks) {
-                    window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, { color: '#D4AF37', lineWidth: 3 });
-                    window.drawLandmarks(canvasCtx, landmarks, { color: '#006b5c', lineWidth: 2 });
+                    window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, { color: '#ffd700', lineWidth: 3 });
+                    window.drawLandmarks(canvasCtx, landmarks, { color: '#800000', lineWidth: 2 });
                 }
             } else {
                 setHandsDetected(false);
@@ -203,13 +203,13 @@ const DetailAyatIsyarat = () => {
             <main className="ml-72 p-6 md:p-12 pb-32 w-full" id="main-content" role="main">
                 {/* Breadcrumb */}
                 <nav className="mb-8 flex items-center gap-2 text-sm text-[#575c60] font-medium">
-                    <span onClick={() => navigate('/siswa')} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">Beranda</span>
+                    <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Beranda</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span onClick={() => navigate('/ayat-pendek')} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">Ayat Pendek</span>
+                    <span onClick={() => navigate({ to: '/ayat-pendek' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Ayat Pendek</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span onClick={() => navigate(`/ayat-pendek/${surah}`)} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">{currentSurah.name}</span>
+                    <span onClick={() => navigate({ to: `/ayat-pendek/${surah}` })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">{currentSurah.name}</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span className="text-[#006b5c] font-bold">Mode Isyarat 🤟</span>
+                    <span className="text-[#800000] font-bold">Mode Isyarat 🤟</span>
                 </nav>
 
                 {/* Header */}
@@ -217,17 +217,17 @@ const DetailAyatIsyarat = () => {
                     <div className="flex items-end justify-between">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <span className="px-4 py-1.5 bg-[#D4AF37]/20 text-[#b18b10] text-xs font-black uppercase tracking-widest rounded-full flex items-center gap-2">
+                                <span className="px-4 py-1.5 bg-[#ffd700]/20 text-[#b18b10] text-xs font-black uppercase tracking-widest rounded-full flex items-center gap-2">
                                     <span className="material-symbols-outlined text-sm">sign_language</span>
                                     Mode Isyarat
                                 </span>
-                                <span className="px-4 py-1.5 bg-[#006b5c]/10 text-[#006b5c] text-xs font-black uppercase tracking-widest rounded-full">
+                                <span className="px-4 py-1.5 bg-[#800000]/10 text-[#800000] text-xs font-black uppercase tracking-widest rounded-full">
                                     Ayat {verse.id} / {currentSurah.verses.length}
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-black text-[#006b5c] siswa-headline tracking-tight">{currentSurah.name}</h1>
+                            <h1 className="text-4xl md:text-5xl font-black text-[#800000] siswa-headline tracking-tight">{currentSurah.name}</h1>
                         </div>
-                        <span className="font-['Amiri'] text-6xl font-bold text-[#006b5c]/80">{currentSurah.arabicName}</span>
+                        <span className="font-['Amiri'] text-6xl font-bold text-[#800000]/80">{currentSurah.arabicName}</span>
                     </div>
 
                     {/* Verse progress dots */}
@@ -236,7 +236,7 @@ const DetailAyatIsyarat = () => {
                             <button
                                 key={v.id}
                                 onClick={() => setCurrentVerse(index)}
-                                className={`h-2 rounded-full transition-all duration-300 ${index === currentVerse ? 'bg-[#D4AF37] w-8' : 'bg-[#dde3e8] w-3 hover:bg-[#006b5c]/30'}`}
+                                className={`h-2 rounded-full transition-all duration-300 ${index === currentVerse ? 'bg-[#ffd700] w-8' : 'bg-[#dde3e8] w-3 hover:bg-[#800000]/30'}`}
                                 aria-label={`Pindah ke ayat ${v.id}`}
                             />
                         ))}
@@ -249,9 +249,9 @@ const DetailAyatIsyarat = () => {
                         {/* Arabic Verse Card */}
                         <div className="bg-white rounded-2xl p-8 md:p-10 relative overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,107,92,0.08)]">
                             <div className="absolute inset-0 bg-arabesque relative z-0 opacity-10"></div>
-                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-3xl"></div>
+                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#ffd700]/10 rounded-full blur-3xl"></div>
                             <div className="relative z-10">
-                                <p className="font-['Amiri'] text-[3.5rem] md:text-[4.5rem] leading-[1.5] text-[#006b5c] text-center mb-6" dir="rtl">
+                                <p className="font-['Amiri'] text-[3.5rem] md:text-[4.5rem] leading-[1.5] text-[#800000] text-center mb-6" dir="rtl">
                                     {verse.arabic}
                                 </p>
                                 <div className="border-t border-[#ecf1f6] pt-6 space-y-3">
@@ -270,7 +270,7 @@ const DetailAyatIsyarat = () => {
                             onClick={playMurottal}
                             className={`w-full flex items-center justify-center gap-4 px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-sm ${isPlaying
                                     ? 'bg-red-50 text-red-600 border-2 border-red-200'
-                                    : 'bg-[#006b5c] text-white hover:bg-[#005a4d] shadow-lg shadow-[#006b5c]/20'
+                                    : 'bg-[#800000] text-white hover:bg-[#005a4d] shadow-lg shadow-[#800000]/20'
                                 } font-['Plus_Jakarta_Sans']`}
                         >
                             <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -282,7 +282,7 @@ const DetailAyatIsyarat = () => {
                         {/* Info Card for Tuna Wicara */}
                         <div className="bg-[#ecf1f6] rounded-xl p-6 relative overflow-hidden">
                             <div className="flex items-start gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[#D4AF37]/20 flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 rounded-full bg-[#ffd700]/20 flex items-center justify-center shrink-0">
                                     <span className="material-symbols-outlined text-[#b18b10] text-lg">info</span>
                                 </div>
                                 <div>
@@ -317,35 +317,35 @@ const DetailAyatIsyarat = () => {
                                 <video ref={videoRef} className="hidden" autoPlay playsInline></video>
                                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover"></canvas>
                                 {/* Scanning Frame */}
-                                <div className="relative w-64 h-64 border-2 border-[#D4AF37]/50 rounded-2xl z-10 box-border">
-                                    <div className="scanning-line" style={{ background: 'linear-gradient(to right, transparent, #D4AF37, transparent)' }}></div>
+                                <div className="relative w-64 h-64 border-2 border-[#ffd700]/50 rounded-2xl z-10 box-border">
+                                    <div className="scanning-line" style={{ background: 'linear-gradient(to right, transparent, #ffd700, transparent)' }}></div>
                                     {/* Corners */}
-                                    <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-4 border-l-4 border-[#D4AF37] rounded-tl-lg"></div>
-                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-t-4 border-r-4 border-[#D4AF37] rounded-tr-lg"></div>
-                                    <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6 border-b-4 border-l-4 border-[#D4AF37] rounded-bl-lg"></div>
-                                    <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-[#D4AF37] rounded-br-lg"></div>
+                                    <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-4 border-l-4 border-[#ffd700] rounded-tl-lg"></div>
+                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-t-4 border-r-4 border-[#ffd700] rounded-tr-lg"></div>
+                                    <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6 border-b-4 border-l-4 border-[#ffd700] rounded-bl-lg"></div>
+                                    <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-[#ffd700] rounded-br-lg"></div>
                                 </div>
                             </div>
 
                             {/* Status Bar */}
                             <div className="bg-white p-5 flex items-center justify-between border-t border-gray-100">
                                 <div className="flex items-center gap-4">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-inner ${handsDetected ? 'bg-green-100' : 'bg-[#006b5c]/10'}`}>
-                                        <span className={`material-symbols-outlined text-xl ${handsDetected ? 'text-green-600' : 'text-[#006b5c] animate-spin-slow'}`}>
+                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-inner ${handsDetected ? 'bg-green-100' : 'bg-[#800000]/10'}`}>
+                                        <span className={`material-symbols-outlined text-xl ${handsDetected ? 'text-green-600' : 'text-[#800000] animate-spin-slow'}`}>
                                             {handsDetected ? 'done' : 'sync'}
                                         </span>
                                     </div>
                                     <div>
                                         <h4 className="text-sm font-bold text-[#2a2f32] font-['Plus_Jakarta_Sans']">Status Deteksi</h4>
-                                        <p className={`text-xs font-semibold mt-0.5 font-['Plus_Jakarta_Sans'] ${handsDetected ? 'text-green-600' : 'text-[#006b5c]'}`}>
+                                        <p className={`text-xs font-semibold mt-0.5 font-['Plus_Jakarta_Sans'] ${handsDetected ? 'text-green-600' : 'text-[#800000]'}`}>
                                             {statusMsg}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
-                                    <div className={`w-2 h-2 rounded-full ${handsDetected ? 'bg-green-500' : 'bg-[#D4AF37]'} animate-pulse`}></div>
-                                    <div className="w-2 h-2 rounded-full bg-[#D4AF37]/30"></div>
-                                    <div className="w-2 h-2 rounded-full bg-[#D4AF37]/30"></div>
+                                    <div className={`w-2 h-2 rounded-full ${handsDetected ? 'bg-green-500' : 'bg-[#ffd700]'} animate-pulse`}></div>
+                                    <div className="w-2 h-2 rounded-full bg-[#ffd700]/30"></div>
+                                    <div className="w-2 h-2 rounded-full bg-[#ffd700]/30"></div>
                                 </div>
                             </div>
                         </div>
@@ -354,13 +354,13 @@ const DetailAyatIsyarat = () => {
                         <div className="flex items-center justify-between gap-4">
                             <button
                                 onClick={handlePrev}
-                                className="flex items-center gap-3 px-6 py-4 bg-white hover:bg-[#ecf1f6] border border-[#006b5c]/20 text-[#006b5c] font-black rounded-full transition-all hover:-translate-x-1 shadow-sm font-['Plus_Jakarta_Sans']"
+                                className="flex items-center gap-3 px-6 py-4 bg-white hover:bg-[#ecf1f6] border border-[#800000]/20 text-[#800000] font-black rounded-full transition-all hover:-translate-x-1 shadow-sm font-['Plus_Jakarta_Sans']"
                             >
                                 <span className="material-symbols-outlined text-lg">arrow_back</span>
                                 {isFirst ? "Kembali" : "Ayat Sebelumnya"}
                             </button>
                             <button
-                                onClick={() => navigate(`/ayat-pendek/${surah}`)}
+                                onClick={() => navigate({ to: `/ayat-pendek/${surah}` })}
                                 className="flex items-center gap-3 px-5 py-4 bg-[#ecf1f6] hover:bg-[#dde3e8] text-[#575c60] font-bold rounded-full transition-all shadow-sm font-['Plus_Jakarta_Sans']"
                                 aria-label="Beralih ke mode reguler (suara)"
                             >
@@ -369,7 +369,7 @@ const DetailAyatIsyarat = () => {
                             </button>
                             <button
                                 onClick={handleNext}
-                                className="flex items-center gap-3 px-6 py-4 bg-[#006b5c] text-[#dbf8ff] font-black rounded-full transition-all hover:translate-x-1 shadow-lg shadow-[#006b5c]/20 font-['Plus_Jakarta_Sans']"
+                                className="flex items-center gap-3 px-6 py-4 bg-[#800000] text-[#dbf8ff] font-black rounded-full transition-all hover:translate-x-1 shadow-lg shadow-[#800000]/20 font-['Plus_Jakarta_Sans']"
                             >
                                 {isLast ? "Selesai" : "Ayat Berikutnya"}
                                 <span className="material-symbols-outlined text-lg">
@@ -383,14 +383,14 @@ const DetailAyatIsyarat = () => {
                 {/* Coby the Mascot */}
                 <div className="fixed bottom-24 md:bottom-8 right-8 z-40 flex flex-col items-end gap-2 pointer-events-none hidden md:flex">
                     {/* Speech Bubble */}
-                    <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-xl border border-[#006b5c]/10 max-w-[220px] relative mb-2 animate-bounce-slow">
-                        <p className="text-[#006b5c] font-bold text-sm leading-relaxed text-center font-['Plus_Jakarta_Sans']">
+                    <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-xl border border-[#800000]/10 max-w-[220px] relative mb-2 animate-bounce-slow">
+                        <p className="text-[#800000] font-bold text-sm leading-relaxed text-center font-['Plus_Jakarta_Sans']">
                             {handsDetected
                                 ? "Bagus! Tangan terdeteksi! Coba isyaratkan ayatnya 🤲"
                                 : "Tunjukkan tanganmu ke kamera ya! 👋"}
                         </p>
                         {/* Tail */}
-                        <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-r border-b border-[#006b5c]/10 rotate-45"></div>
+                        <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-r border-b border-[#800000]/10 rotate-45"></div>
                     </div>
                     {/* Mascot Image */}
                     <div className="w-32 h-32 drop-shadow-[0_20px_30px_rgba(0,107,92,0.3)]">

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import maskot from './assets/maskot.png';
 
 import baHandsign from './hijaiyah/baa.png'; 
@@ -10,6 +10,7 @@ const { Hands, HAND_CONNECTIONS, Camera, drawConnectors, drawLandmarks } = windo
 
 const DetailHijaiyahIsyarat = () => {
     const navigate = useNavigate();
+    const { letter } = useParams({ from: '/iqra/hijaiyah/isyarat/$letter' });
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");
@@ -109,13 +110,13 @@ const DetailHijaiyahIsyarat = () => {
             <main className="ml-72 p-6 md:p-12 pb-32 w-full" id="main-content" role="main">
                 {/* Breadcrumb */}
                 <nav className="mb-8 flex items-center gap-2 text-sm text-[#575c60] font-medium">
-                    <span onClick={() => navigate('/siswa')} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">Beranda</span>
+                    <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Beranda</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span onClick={() => navigate('/iqra')} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">Iqra'</span>
+                    <span onClick={() => navigate({ to: '/iqra' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Iqra'</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span onClick={() => navigate('/iqra/hijaiyah')} className="hover:text-[#006b5c] cursor-pointer transition-colors" tabIndex="0">Hijaiyah</span>
+                    <span onClick={() => navigate({ to: '/iqra/hijaiyah' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Hijaiyah</span>
                     <span className="material-symbols-outlined text-sm">chevron_right</span>
-                    <span className="text-[#006b5c] font-bold">Ba (Isyarat)</span>
+                    <span className="text-[#800000] font-bold">Ba (Isyarat)</span>
                 </nav>
 
                 <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -126,7 +127,7 @@ const DetailHijaiyahIsyarat = () => {
                             <div className="absolute inset-0 bg-arabesque relative z-0 opacity-10"></div>
                             <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#5de3fc]/20 rounded-full blur-3xl"></div>
                             <div className="relative z-10 w-full">
-                                <span className="block text-[120px] md:text-[140px] font-bold text-[#006b5c] leading-none font-['Noto_Sans_Arabic'] mb-4">ب</span>
+                                <span className="block text-[120px] md:text-[140px] font-bold text-[#800000] leading-none font-['Noto_Sans_Arabic'] mb-4">ب</span>
                                 <h2 className="text-3xl font-black text-[#2a2f32] mt-4 font-['Plus_Jakarta_Sans']">Ba</h2>
                                 <p className="text-[#575c60] text-sm mt-1 font-medium font-['Plus_Jakarta_Sans']">Huruf Kedua Hijaiyah</p>
                             </div>
@@ -136,7 +137,7 @@ const DetailHijaiyahIsyarat = () => {
                         <div className="bg-[#ecf1f6] rounded-xl p-8 relative overflow-hidden shadow-sm">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-bold text-[#2a2f32] font-['Plus_Jakarta_Sans']">Panduan Isyarat</h3>
-                                <div className="bg-[#D4AF37]/20 px-3 py-1 rounded-full">
+                                <div className="bg-[#ffd700]/20 px-3 py-1 rounded-full">
                                     <span className="text-xs font-bold text-[#b18b10]">3D Visual</span>
                                 </div>
                             </div>
@@ -144,7 +145,7 @@ const DetailHijaiyahIsyarat = () => {
                                <img alt="Visual 3D tangan menunjukkan isyarat huruf Ba bahasa Arab" className="w-full h-full object-contain hover:scale-105 transition-transform duration-500 cursor-pointer" src={baHandsign}/>
                             </div>
                             <p className="mt-6 text-[#575c60] text-sm leading-relaxed font-['Plus_Jakarta_Sans']">
-                                Posisikan tangan Anda sesuai panduan visual untuk melambangkan bentuk huruf <span className="font-bold text-[#006b5c]">Ba</span>.
+                                Posisikan tangan Anda sesuai panduan visual untuk melambangkan bentuk huruf <span className="font-bold text-[#800000]">Ba</span>.
                             </p>
                         </div>
                     </div>
@@ -163,44 +164,44 @@ const DetailHijaiyahIsyarat = () => {
                                 <video ref={videoRef} className="hidden" autoPlay playsInline></video>
                                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover"></canvas>
                                 {/* Scanning Frame */}
-                                <div className="relative w-64 h-64 border-2 border-[#D4AF37]/50 rounded-2xl z-10 box-border">
-                                    <div className="scanning-line" style={{ background: 'linear-gradient(to right, transparent, #D4AF37, transparent)' }}></div>
+                                <div className="relative w-64 h-64 border-2 border-[#ffd700]/50 rounded-2xl z-10 box-border">
+                                    <div className="scanning-line" style={{ background: 'linear-gradient(to right, transparent, #ffd700, transparent)' }}></div>
                                     {/* Corners */}
-                                    <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-4 border-l-4 border-[#D4AF37] rounded-tl-lg"></div>
-                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-t-4 border-r-4 border-[#D4AF37] rounded-tr-lg"></div>
-                                    <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6 border-b-4 border-l-4 border-[#D4AF37] rounded-bl-lg"></div>
-                                    <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-[#D4AF37] rounded-br-lg"></div>
+                                    <div className="absolute -top-1.5 -left-1.5 w-6 h-6 border-t-4 border-l-4 border-[#ffd700] rounded-tl-lg"></div>
+                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 border-t-4 border-r-4 border-[#ffd700] rounded-tr-lg"></div>
+                                    <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6 border-b-4 border-l-4 border-[#ffd700] rounded-bl-lg"></div>
+                                    <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-[#ffd700] rounded-br-lg"></div>
                                 </div>
                             </div>
                             
                             {/* Status Bar */}
                             <div className="bg-white p-6 flex items-center justify-between border-t border-gray-100">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-[#006b5c]/10 flex items-center justify-center shadow-inner">
-                                        <span className="material-symbols-outlined text-[#006b5c] text-xl animate-spin-slow">sync</span>
+                                    <div className="w-12 h-12 rounded-full bg-[#800000]/10 flex items-center justify-center shadow-inner">
+                                        <span className="material-symbols-outlined text-[#800000] text-xl animate-spin-slow">sync</span>
                                     </div>
                                     <div>
                                         <h4 className="text-sm font-bold text-[#2a2f32] font-['Plus_Jakarta_Sans']">Status Deteksi</h4>
-                                        <p className={`text-xs font-semibold mt-0.5 font-['Plus_Jakarta_Sans'] ${statusMsg.includes('✅') ? 'text-green-600 text-sm' : 'text-[#006b5c]'}`}>
+                                        <p className={`text-xs font-semibold mt-0.5 font-['Plus_Jakarta_Sans'] ${statusMsg.includes('✅') ? 'text-green-600 text-sm' : 'text-[#800000]'}`}>
                                             {statusMsg}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
-                                    <div className="w-2 h-2 rounded-full bg-[#D4AF37]/30"></div>
-                                    <div className="w-2 h-2 rounded-full bg-[#D4AF37]/30"></div>
+                                    <div className="w-2 h-2 rounded-full bg-[#ffd700] animate-pulse"></div>
+                                    <div className="w-2 h-2 rounded-full bg-[#ffd700]/30"></div>
+                                    <div className="w-2 h-2 rounded-full bg-[#ffd700]/30"></div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Navigation Controls */}
                         <div className="flex items-center justify-between gap-6">
-                            <button onClick={() => navigate('/iqra/hijaiyah')} className="flex items-center gap-4 px-6 py-4 bg-[#white] hover:bg-[#ecf1f6] border border-[#006b5c]/20 text-[#006b5c] font-black rounded-full transition-all hover:-translate-x-2 w-1/3 justify-center shadow-sm font-['Plus_Jakarta_Sans']">
+                            <button onClick={() => navigate({ to: '/iqra/hijaiyah' })} className="flex items-center gap-4 px-6 py-4 bg-[#white] hover:bg-[#ecf1f6] border border-[#800000]/20 text-[#800000] font-black rounded-full transition-all hover:-translate-x-2 w-1/3 justify-center shadow-sm font-['Plus_Jakarta_Sans']">
                                 <span className="material-symbols-outlined text-lg">arrow_back</span>
                                 Kembali
                             </button>
-                            <button className="flex items-center gap-4 px-6 py-4 bg-[#006b5c] text-[#dbf8ff] font-black rounded-full transition-all hover:translate-x-2 shadow-lg shadow-[#006b5c]/20 w-2/3 justify-center font-['Plus_Jakarta_Sans']">
+                            <button className="flex items-center gap-4 px-6 py-4 bg-[#800000] text-[#dbf8ff] font-black rounded-full transition-all hover:translate-x-2 shadow-lg shadow-[#800000]/20 w-2/3 justify-center font-['Plus_Jakarta_Sans']">
                                 Lanjut ke Huruf Ta
                                 <span className="material-symbols-outlined text-lg">arrow_forward</span>
                             </button>
@@ -211,12 +212,12 @@ const DetailHijaiyahIsyarat = () => {
                 {/* Coby the Mascot */}
                 <div className="fixed bottom-24 md:bottom-8 right-8 z-40 flex flex-col items-end gap-2 pointer-events-none hidden md:flex">
                     {/* Speech Bubble */}
-                    <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-xl border border-[#006b5c]/10 max-w-[200px] relative mb-2 animate-bounce-slow">
-                        <p className="text-[#006b5c] font-bold text-sm leading-relaxed text-center font-['Plus_Jakarta_Sans']">
+                    <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-xl border border-[#800000]/10 max-w-[200px] relative mb-2 animate-bounce-slow">
+                        <p className="text-[#800000] font-bold text-sm leading-relaxed text-center font-['Plus_Jakarta_Sans']">
                             Coba praktekkan isyarat Ba ya! 🤲
                         </p>
                         {/* Tail */}
-                        <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-r border-b border-[#006b5c]/10 rotate-45"></div>
+                        <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-r border-b border-[#800000]/10 rotate-45"></div>
                     </div>
                     {/* Mascot Image */}
                     <div className="w-32 h-32 drop-shadow-[0_20px_30px_rgba(0,107,92,0.3)]">

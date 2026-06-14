@@ -21,7 +21,7 @@
   font-weight: 800;
   color: var(--text-primary);
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, #fff, #a5b4fc);
+  background: linear-gradient(135deg, #fff, #ffd700);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -52,7 +52,7 @@
   height: 2px;
   bottom: -4px;
   left: 0;
-  background-color: var(--secondary-color);
+  background-color: #ffd700;
   transition: width 0.3s ease;
 }
 
@@ -77,14 +77,14 @@
 
 .hero-label {
   display: inline-block;
-  background: rgba(99, 102, 241, 0.1);
-  color: #a5b4fc;
+  background: rgba(212, 0, 0, 0.1);
+  color: #ff9999;
   padding: 0.5rem 1.25rem;
   border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 2rem;
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(212, 0, 0, 0.2);
 }
 
 .hero-title {
@@ -96,7 +96,7 @@
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f43f5e 100%);
+  background: linear-gradient(135deg, #800000 0%, #d40000 50%, #ffd700 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -150,7 +150,7 @@
 .feature-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: rgba(212, 0, 0, 0.3);
 }
 
 .feature-icon {

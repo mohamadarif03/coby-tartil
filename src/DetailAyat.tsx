@@ -1,13 +1,14 @@
 import React, { useState, useRef } from 'react';
 import Sidebar from './Sidebar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility'; // ADDED
 import { analyzeRecitation } from './geminiService'; // AI Analysis
 
 function DetailAyat() {
   const navigate = useNavigate();
-  useAccessibility('Detail Ayat Al-Kautsar'); // ADDED
+  const { surah } = useParams({ from: '/ayat-pendek/$surah' });
+  useAccessibility('Detail Ayat'); // ADDED
 
   const verses = [
     {
@@ -40,11 +41,11 @@ function DetailAyat() {
 
   const handleNext = () => {
     if (!isLast) setCurrentVerse(prev => prev + 1);
-    else navigate('/ayat-pendek');
+    else navigate({ to: '/ayat-pendek' });
   };
 
   const handlePrev = () => {
-    if (isFirst) navigate('/ayat-pendek');
+    if (isFirst) navigate({ to: '/ayat-pendek' });
     else setCurrentVerse(prev => prev - 1);
   };
 
@@ -196,18 +197,18 @@ function DetailAyat() {
         <header className="flex justify-between items-center w-full mb-12">
           <div className="flex flex-col">
             <nav aria-label="Breadcrumb" className="text-sm font-medium text-[#575c60] flex items-center gap-2 mb-2">
-              <a href="#" className="hover:text-[#006b5c] transition-colors" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+              <a href="#" className="hover:text-[#800000] transition-colors" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
               <span className="material-symbols-outlined text-xs">chevron_right</span>
-              <a href="#" className="hover:text-[#006b5c] transition-colors" onClick={(e) => { e.preventDefault(); navigate('/ayat-pendek'); }}>Ayat Pendek</a>
+              <a href="#" className="hover:text-[#800000] transition-colors" onClick={(e) => { e.preventDefault(); navigate({ to: '/ayat-pendek' }); }}>Ayat Pendek</a>
               <span className="material-symbols-outlined text-xs">chevron_right</span>
-              <span className="text-[#006b5c] font-bold">Al-Kautsar</span>
+              <span className="text-[#800000] font-bold">Al-Kautsar</span>
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <button aria-label="Volume settings" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#ecf1f6] text-[#006b5c] hover:bg-[#dde3e8] transition-colors">
+            <button aria-label="Volume settings" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#ecf1f6] text-[#800000] hover:bg-[#dde3e8] transition-colors">
               <span className="material-symbols-outlined">volume_up</span>
             </button>
-            <button aria-label="Help" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#ecf1f6] text-[#006b5c] hover:bg-[#dde3e8] transition-colors">
+            <button aria-label="Help" className="w-12 h-12 flex items-center justify-center rounded-full bg-[#ecf1f6] text-[#800000] hover:bg-[#dde3e8] transition-colors">
               <span className="material-symbols-outlined">help_outline</span>
             </button>
           </div>
@@ -218,7 +219,7 @@ function DetailAyat() {
           {/* SURAH HEADER */}
           <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-5xl font-black text-[#006b5c] siswa-headline mb-2 tracking-tight">Al-Kautsar</h2>
+              <h2 className="text-5xl font-black text-[#800000] siswa-headline mb-2 tracking-tight">Al-Kautsar</h2>
               <div className="flex items-center gap-3">
                 <span className="bg-[#ffc78e] text-[#6a4800] px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Ayat {verse.id} dari {verses.length}</span>
                 <div className="flex gap-2">
@@ -229,7 +230,7 @@ function DetailAyat() {
               </div>
             </div>
             <div className="text-right">
-              <span className="font-['Amiri'] text-7xl font-bold text-[#006b5c]">الكوثر</span>
+              <span className="font-['Amiri'] text-7xl font-bold text-[#800000]">الكوثر</span>
             </div>
           </div>
 
@@ -242,12 +243,12 @@ function DetailAyat() {
               <div className="absolute inset-0 bg-gradient-to-br from-[#ffc78e]/10 to-transparent pointer-events-none"></div>
               
               {/* Decorative Arabesque Mask */}
-              <div className="absolute top-0 right-0 w-64 h-64 opacity-[0.03] text-[#006b5c] pointer-events-none translate-x-1/2 -translate-y-1/2">
+              <div className="absolute top-0 right-0 w-64 h-64 opacity-[0.03] text-[#800000] pointer-events-none translate-x-1/2 -translate-y-1/2">
                 <span className="material-symbols-outlined text-[12rem]">auto_stories</span>
               </div>
               
               <div className="relative z-10 flex flex-col items-center text-center gap-12">
-                <p aria-label="Arabic Verse Content" className="font-['Amiri'] text-[5.5rem] leading-[1.4] text-[#006b5c]" dir="rtl">
+                <p aria-label="Arabic Verse Content" className="font-['Amiri'] text-[5.5rem] leading-[1.4] text-[#800000]" dir="rtl">
                   {verse.arabic}
                 </p>
                 <div className="space-y-4 max-w-2xl">
@@ -265,22 +266,22 @@ function DetailAyat() {
             <div className="md:col-span-4 flex flex-col gap-8 pt-8">
               {/* MASCOT */}
               <div className="relative h-64 flex items-center justify-center cursor-pointer">
-                <div className={`absolute -z-10 w-48 h-48 rounded-full blur-3xl transition-colors duration-500 ${isRecording ? 'bg-red-400/30 animate-pulse' : isAnalyzing ? 'bg-yellow-400/30 animate-pulse' : 'bg-[#006b5c]/10'}`}></div>
+                <div className={`absolute -z-10 w-48 h-48 rounded-full blur-3xl transition-colors duration-500 ${isRecording ? 'bg-red-400/30 animate-pulse' : isAnalyzing ? 'bg-yellow-400/30 animate-pulse' : 'bg-[#800000]/10'}`}></div>
                 <img alt="Coby the Mascot" className={`w-48 h-auto object-contain drop-shadow-2xl filter transition-transform ${isRecording ? 'scale-110 animate-bounce' : 'hover:scale-105'}`} src={mascotImg} />
               </div>
               
               {/* FEEDBACK BUBBLE */}
-              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isAnalyzing ? 'border-yellow-300/50 animate-pulse' : aiResult && !aiResult.error ? 'border-[#006b5c]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
+              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isAnalyzing ? 'border-yellow-300/50 animate-pulse' : aiResult && !aiResult.error ? 'border-[#800000]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
                 
                 {isAnalyzing ? (
                   // Loading state
                   <div className="flex flex-col items-center gap-3">
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-[#006b5c] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                      <div className="w-2 h-2 bg-[#006b5c] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                      <div className="w-2 h-2 bg-[#006b5c] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      <div className="w-2 h-2 bg-[#800000] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-[#800000] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                      <div className="w-2 h-2 bg-[#800000] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                     </div>
-                    <p className="text-[#006b5c] font-bold text-lg">Coby sedang mendengarkan... 🎧</p>
+                    <p className="text-[#800000] font-bold text-lg">Coby sedang mendengarkan... 🎧</p>
                   </div>
                 ) : (
                   // Feedback content
@@ -288,7 +289,7 @@ function DetailAyat() {
                     <div className="flex gap-1 mb-3">
                       {renderStars(displayRating)}
                     </div>
-                    <p className="text-[#006b5c] font-bold text-lg leading-snug mb-2">
+                    <p className="text-[#800000] font-bold text-lg leading-snug mb-2">
                       {displayFeedback}
                     </p>
                     
@@ -311,14 +312,14 @@ function DetailAyat() {
                       <div className="mt-4 pt-4 border-t border-[#dde3e8]">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs font-bold text-[#575c60] uppercase tracking-wider">Skor Pelafalan</span>
-                          <span className="text-lg font-black text-[#006b5c]">{aiResult.pronunciationScore}/100</span>
+                          <span className="text-lg font-black text-[#800000]">{aiResult.pronunciationScore}/100</span>
                         </div>
                         <div className="h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
                           <div 
                             className="h-full rounded-full transition-all duration-1000" 
                             style={{ 
                               width: `${aiResult.pronunciationScore}%`,
-                              backgroundColor: aiResult.pronunciationScore >= 80 ? '#006b5c' : aiResult.pronunciationScore >= 50 ? '#ffc78e' : '#ef4444' 
+                              backgroundColor: aiResult.pronunciationScore >= 80 ? '#800000' : aiResult.pronunciationScore >= 50 ? '#ffc78e' : '#ef4444' 
                             }}
                           ></div>
                         </div>
@@ -339,7 +340,7 @@ function DetailAyat() {
               <button 
                 aria-label={isPlaying ? "Berhenti mendengarkan murottal" : "Dengarkan murottal"} 
                 onClick={playMurottal}
-                className="flex items-center gap-4 bg-[#006b5c] text-white px-10 py-5 rounded-full text-xl font-bold shadow-lg shadow-[#006b5c]/20 hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2"
+                className="flex items-center gap-4 bg-[#800000] text-white px-10 py-5 rounded-full text-xl font-bold shadow-lg shadow-[#800000]/20 hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2"
               >
                 <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
                   {isPlaying ? 'stop_circle' : 'play_arrow'}
@@ -350,7 +351,7 @@ function DetailAyat() {
                 aria-label={isRecording ? 'Berhenti merekam suara' : isAnalyzing ? 'Menunggu analisis AI' : 'Mulai merekam bacaan'} 
                 onClick={toggleRecording}
                 disabled={isAnalyzing}
-                className={`flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
                   isRecording 
                     ? 'bg-red-500 text-white shadow-red-500/20 animate-pulse' 
                     : 'bg-[#ffc78e] text-[#6a4800] shadow-[#ffc78e]/20'
@@ -363,8 +364,8 @@ function DetailAyat() {
               </button>
               <button 
                 aria-label="Beralih ke mode isyarat (kamera)" 
-                onClick={() => navigate('/ayat-pendek/isyarat/al-kautsar')}
-                className="flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 bg-[#D4AF37]/20 text-[#6a4800] border-2 border-[#D4AF37]/30 hover:bg-[#D4AF37]/30"
+                onClick={() => navigate({ to: '/ayat-pendek/isyarat/al-kautsar' })}
+                className="flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 bg-[#ffd700]/20 text-[#6a4800] border-2 border-[#ffd700]/30 hover:bg-[#ffd700]/30"
               >
                 <span className="material-symbols-outlined text-3xl">sign_language</span>
                 Mode Isyarat
@@ -409,16 +410,16 @@ function DetailAyat() {
                 </>
               ) : (
                 <>
-                  <div className="w-1 h-4 bg-[#006b5c]/30 rounded-full"></div>
-                  <div className="w-1 h-8 bg-[#006b5c]/40 rounded-full"></div>
-                  <div className="w-1 h-12 bg-[#006b5c] rounded-full"></div>
-                  <div className="w-1 h-6 bg-[#006b5c]/50 rounded-full"></div>
-                  <div className="w-1 h-2 bg-[#006b5c]/20 rounded-full"></div>
+                  <div className="w-1 h-4 bg-[#800000]/30 rounded-full"></div>
+                  <div className="w-1 h-8 bg-[#800000]/40 rounded-full"></div>
+                  <div className="w-1 h-12 bg-[#800000] rounded-full"></div>
+                  <div className="w-1 h-6 bg-[#800000]/50 rounded-full"></div>
+                  <div className="w-1 h-2 bg-[#800000]/20 rounded-full"></div>
                 </>
               )}
             </div>
             
-            <button aria-label="Next verse" onClick={handleNext} className="flex items-center gap-3 bg-[#ffffff] text-[#006b5c] font-bold px-8 py-4 rounded-xl hover:bg-[#006b5c] hover:text-white shadow-sm hover:shadow-md transition-all group border border-transparent">
+            <button aria-label="Next verse" onClick={handleNext} className="flex items-center gap-3 bg-[#ffffff] text-[#800000] font-bold px-8 py-4 rounded-xl hover:bg-[#800000] hover:text-white shadow-sm hover:shadow-md transition-all group border border-transparent">
               {isLast ? "Selesai Hafalan" : "Ayat Berikutnya"}
               {isLast ? <span className="material-symbols-outlined">done_all</span> : <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>}
             </button>

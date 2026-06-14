@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import Sidebar from './Sidebar';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
@@ -89,11 +89,11 @@ function IqraMad() {
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm font-medium text-slate-500 mb-8">
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/iqra'); }}>Iqra'</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/iqra' }); }}>Iqra'</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <span className="text-[#006b5c] font-bold">Mad</span>
+            <span className="text-[#800000] font-bold">Mad</span>
           </nav>
 
           {/* Header */}
@@ -130,7 +130,7 @@ function IqraMad() {
               <button
                 key={i}
                 onClick={() => { setActiveTab(i); setSelectedExample(null); }}
-                className={`rounded-2xl p-6 text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] border-2 ${
+                className={`rounded-2xl p-6 text-center transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] border-2 ${
                   activeTab === i 
                     ? `bg-gradient-to-br ${mad.color} text-white shadow-xl scale-[1.03] border-transparent` 
                     : `bg-white ${mad.textColor} hover:shadow-md ${mad.textColor.replace('text', 'border')}/30`
@@ -175,7 +175,7 @@ function IqraMad() {
 
                 <button
                   onClick={() => speakArabic(active.examples[0]?.arabic || '')}
-                  className={`w-full py-4 rounded-xl bg-gradient-to-r ${active.color} text-white font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017]`}
+                  className={`w-full py-4 rounded-xl bg-gradient-to-r ${active.color} text-white font-bold flex items-center justify-center gap-3 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700]`}
                   aria-label={`Dengarkan contoh mad`}
                 >
                   <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>play_arrow</span>
@@ -194,7 +194,7 @@ function IqraMad() {
                 </h3>
                 <button
                   onClick={() => setShowComparison(!showComparison)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                     showComparison ? 'bg-cyan-100 text-cyan-700' : 'bg-slate-100 text-slate-500'
                   }`}
                 >
@@ -211,14 +211,14 @@ function IqraMad() {
                       setSelectedExample(i);
                       speakArabic(ex.arabic);
                     }}
-                    className={`relative bg-white rounded-xl p-5 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 border-2 ${
+                    className={`relative bg-white rounded-xl p-5 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 border-2 ${
                       selectedExample === i ? `${active.textColor.replace('text', 'border')} shadow-lg scale-105` : 'border-transparent hover:border-slate-200'
                     }`}
                     aria-label={`${ex.latin}, klik untuk mendengar`}
                   >
                     {selectedExample === i && (
                       <div className="absolute -top-2 -right-2">
-                        <span className="material-symbols-outlined text-xl text-[#006b5c]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
+                        <span className="material-symbols-outlined text-xl text-[#800000]" style={{ fontVariationSettings: "'FILL' 1" }}>volume_up</span>
                       </div>
                     )}
 

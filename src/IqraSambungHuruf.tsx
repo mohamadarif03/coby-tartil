@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import Sidebar from './Sidebar';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
@@ -50,11 +50,11 @@ function IqraSambungHuruf() {
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm font-medium text-slate-500 mb-8">
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/siswa'); }}>Beranda</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <a className="hover:text-[#006b5c] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate('/iqra'); }}>Iqra'</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/iqra' }); }}>Iqra'</a>
             <span className="material-symbols-outlined text-base">chevron_right</span>
-            <span className="text-[#006b5c] font-bold">Sambung Huruf</span>
+            <span className="text-[#800000] font-bold">Sambung Huruf</span>
           </nav>
 
           {/* Header */}
@@ -74,7 +74,7 @@ function IqraSambungHuruf() {
           <div className="flex gap-3 mb-8">
             <button
               onClick={() => setActiveSection('bentuk')}
-              className={`px-6 py-3 rounded-xl font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+              className={`px-6 py-3 rounded-xl font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                 activeSection === 'bentuk'
                   ? 'bg-violet-600 text-white shadow-lg'
                   : 'bg-white text-slate-600 hover:bg-violet-50 border border-slate-200'
@@ -85,7 +85,7 @@ function IqraSambungHuruf() {
             </button>
             <button
               onClick={() => setActiveSection('kata')}
-              className={`px-6 py-3 rounded-xl font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+              className={`px-6 py-3 rounded-xl font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                 activeSection === 'kata'
                   ? 'bg-violet-600 text-white shadow-lg'
                   : 'bg-white text-slate-600 hover:bg-violet-50 border border-slate-200'
@@ -106,7 +106,7 @@ function IqraSambungHuruf() {
                     <button
                       key={item.name}
                       onClick={() => setSelectedLetter(i)}
-                      className={`aspect-square rounded-xl flex flex-col items-center justify-center font-['Noto_Sans_Arabic'] text-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] ${
+                      className={`aspect-square rounded-xl flex flex-col items-center justify-center font-['Noto_Sans_Arabic'] text-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] ${
                         selectedLetter === i
                           ? 'bg-violet-600 text-white shadow-lg scale-110'
                           : 'bg-white text-slate-700 hover:bg-violet-50 border border-slate-100'
@@ -139,7 +139,7 @@ function IqraSambungHuruf() {
                       <button
                         key={form.label}
                         onClick={() => speakArabic(form.value)}
-                        className="bg-gradient-to-br from-slate-50 to-white rounded-xl p-6 flex flex-col items-center border border-slate-100 hover:border-violet-300 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] group"
+                        className="bg-gradient-to-br from-slate-50 to-white rounded-xl p-6 flex flex-col items-center border border-slate-100 hover:border-violet-300 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] group"
                         aria-label={`${form.desc} huruf ${current.name}`}
                       >
                         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{form.label}</span>
@@ -163,7 +163,7 @@ function IqraSambungHuruf() {
                       <span className="text-2xl text-violet-400 font-bold">=</span>
                       <button
                         onClick={() => speakArabic(current.example)}
-                        className="px-6 py-3 bg-violet-600 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017] group"
+                        className="px-6 py-3 bg-violet-600 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] group"
                         aria-label={`Dengarkan ${current.exampleLatin}`}
                       >
                         <span className="font-['Noto_Sans_Arabic'] text-4xl text-white">{current.example}</span>
@@ -186,7 +186,7 @@ function IqraSambungHuruf() {
                   <button
                     key={i}
                     onClick={() => speakArabic(word.arabic)}
-                    className="bg-white rounded-2xl p-8 flex flex-col items-center text-center border border-slate-100 hover:border-violet-300 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#D4A017] group hover:scale-[1.03]"
+                    className="bg-white rounded-2xl p-8 flex flex-col items-center text-center border border-slate-100 hover:border-violet-300 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] group hover:scale-[1.03]"
                     aria-label={`Kata ${word.latin}, artinya ${word.meaning}`}
                   >
                     <span className="font-['Noto_Sans_Arabic'] text-5xl text-[#2a2f32] group-hover:text-violet-600 transition-colors mb-4">{word.arabic}</span>

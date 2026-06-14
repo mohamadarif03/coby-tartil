@@ -35,10 +35,10 @@ const HIJAIYAH_LETTERS = [
 
 const PEN_COLORS = [
   { color: '#1a1a2e', name: 'Hitam' },
-  { color: '#006b5c', name: 'Hijau Tua' },
+  { color: '#800000', name: 'Hijau Tua' },
   { color: '#0066cc', name: 'Biru' },
   { color: '#8b1a1a', name: 'Merah Tua' },
-  { color: '#D4A017', name: 'Emas' },
+  { color: '#ffd700', name: 'Emas' },
 ];
 
 const PEN_SIZES = [3, 6, 10, 16];
@@ -252,7 +252,7 @@ function MenulisHijaiyah() {
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-4xl font-black text-[#006b5c] tracking-tight mb-2 font-['Plus_Jakarta_Sans']">
+            <h2 className="text-4xl font-black text-[#800000] tracking-tight mb-2 font-['Plus_Jakarta_Sans']">
               Menulis Hijaiyah ✍️
             </h2>
             <p className="text-lg text-[#575c60] font-medium">
@@ -266,7 +266,7 @@ function MenulisHijaiyah() {
           <div className="xl:col-span-3">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#a9aeb1]/10 mb-6">
               <h3 className="text-lg font-bold text-[#2a2f32] mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#006b5c]" aria-hidden="true">abc</span>
+                <span className="material-symbols-outlined text-[#800000]" aria-hidden="true">abc</span>
                 Pilih Huruf
               </h3>
               <div className="grid grid-cols-4 gap-2 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
@@ -277,9 +277,9 @@ function MenulisHijaiyah() {
                       setSelectedLetter(item);
                       setIsEraser(false);
                     }}
-                    className={`relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 group focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-1 ${
+                    className={`relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 group focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-1 ${
                       selectedLetter.name === item.name
-                        ? 'bg-gradient-to-br from-[#006b5c] to-[#00897b] text-white shadow-lg shadow-[#006b5c]/30 scale-105'
+                        ? 'bg-gradient-to-br from-[#800000] to-[#00897b] text-white shadow-lg shadow-[#800000]/30 scale-105'
                         : 'bg-[#f3f7fb] text-[#2a2f32] hover:bg-[#e0ecea] hover:scale-105'
                     }`}
                     aria-label={`Huruf ${item.name}`}
@@ -305,7 +305,7 @@ function MenulisHijaiyah() {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#a9aeb1]/10 mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#006b5c] to-[#00897b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#006b5c]/20">
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#800000] to-[#00897b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#800000]/20">
                     <span className="text-4xl text-white font-bold" style={{ fontFamily: "'Noto Naskh Arabic', 'Amiri', serif" }}>
                       {selectedLetter.letter}
                     </span>
@@ -317,9 +317,9 @@ function MenulisHijaiyah() {
                 </div>
                 <button
                   onClick={() => setShowGuide(!showGuide)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 ${
                     showGuide
-                      ? 'bg-[#006b5c]/10 text-[#006b5c]'
+                      ? 'bg-[#800000]/10 text-[#800000]'
                       : 'bg-[#ecf1f6] text-[#575c60]'
                   }`}
                   aria-label={showGuide ? 'Sembunyikan panduan huruf' : 'Tampilkan panduan huruf'}
@@ -344,9 +344,9 @@ function MenulisHijaiyah() {
                       <button
                         key={c.color}
                         onClick={() => { setPenColor(c.color); setIsEraser(false); }}
-                        className={`w-7 h-7 rounded-full border-2 transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] ${
+                        className={`w-7 h-7 rounded-full border-2 transition-all focus:outline-none focus:ring-2 focus:ring-[#ffd700] ${
                           penColor === c.color && !isEraser
-                            ? 'border-[#006b5c] scale-110 shadow-md'
+                            ? 'border-[#800000] scale-110 shadow-md'
                             : 'border-transparent hover:scale-110'
                         }`}
                         style={{ backgroundColor: c.color }}
@@ -364,9 +364,9 @@ function MenulisHijaiyah() {
                       <button
                         key={size}
                         onClick={() => { setPenSize(size); setIsEraser(false); }}
-                        className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] ${
+                        className={`flex items-center justify-center w-8 h-8 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#ffd700] ${
                           penSize === size && !isEraser
-                            ? 'bg-[#006b5c]/10 text-[#006b5c]'
+                            ? 'bg-[#800000]/10 text-[#800000]'
                             : 'hover:bg-[#ecf1f6] text-[#575c60]'
                         }`}
                         aria-label={`Ketebalan pena ${size}px`}
@@ -385,7 +385,7 @@ function MenulisHijaiyah() {
                   {/* Eraser */}
                   <button
                     onClick={() => setIsEraser(!isEraser)}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] ${
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#ffd700] ${
                       isEraser
                         ? 'bg-[#ff6b6b]/10 text-[#d63031]'
                         : 'hover:bg-[#ecf1f6] text-[#575c60]'
@@ -400,7 +400,7 @@ function MenulisHijaiyah() {
                   <button
                     onClick={undo}
                     disabled={historyIndex < 0}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] hover:bg-[#ecf1f6] text-[#575c60] disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#ffd700] hover:bg-[#ecf1f6] text-[#575c60] disabled:opacity-30 disabled:cursor-not-allowed"
                     aria-label="Undo langkah terakhir"
                   >
                     <span className="material-symbols-outlined text-lg" aria-hidden="true">undo</span>
@@ -409,7 +409,7 @@ function MenulisHijaiyah() {
                   {/* Clear */}
                   <button
                     onClick={clearCanvas}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] hover:bg-[#ff6b6b]/10 text-[#575c60] hover:text-[#d63031]"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#ffd700] hover:bg-[#ff6b6b]/10 text-[#575c60] hover:text-[#d63031]"
                     aria-label="Hapus semua tulisan"
                   >
                     <span className="material-symbols-outlined text-lg" aria-hidden="true">delete</span>
@@ -427,7 +427,7 @@ function MenulisHijaiyah() {
                 {showGuide && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 select-none" aria-hidden="true">
                     <span
-                      className="text-[#006b5c]/[0.07] leading-none"
+                      className="text-[#800000]/[0.07] leading-none"
                       style={{
                         fontFamily: "'Noto Naskh Arabic', 'Amiri', serif",
                         fontSize: '320px',
@@ -461,37 +461,37 @@ function MenulisHijaiyah() {
             {/* Writing Tips */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#a9aeb1]/10 mb-6">
               <h3 className="text-lg font-bold text-[#2a2f32] mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#D4A017]" aria-hidden="true">tips_and_updates</span>
+                <span className="material-symbols-outlined text-[#ffd700]" aria-hidden="true">tips_and_updates</span>
                 Tips Menulis
               </h3>
               <div className="space-y-4">
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-[#006b5c]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm font-black text-[#006b5c]">1</span>
+                  <div className="w-8 h-8 bg-[#800000]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-sm font-black text-[#800000]">1</span>
                   </div>
                   <p className="text-sm text-[#575c60] leading-relaxed">
                     Tulis huruf Arab <strong className="text-[#2a2f32]">dari kanan ke kiri</strong>, mulai dari titik awal yang benar.
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-[#006b5c]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm font-black text-[#006b5c]">2</span>
+                  <div className="w-8 h-8 bg-[#800000]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-sm font-black text-[#800000]">2</span>
                   </div>
                   <p className="text-sm text-[#575c60] leading-relaxed">
                     Perhatikan <strong className="text-[#2a2f32]">proporsi</strong> huruf — ikuti garis panduan di papan.
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-[#006b5c]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm font-black text-[#006b5c]">3</span>
+                  <div className="w-8 h-8 bg-[#800000]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-sm font-black text-[#800000]">3</span>
                   </div>
                   <p className="text-sm text-[#575c60] leading-relaxed">
                     Jangan lupa <strong className="text-[#2a2f32]">titik-titik</strong> pada huruf yang membutuhkannya.
                   </p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 bg-[#006b5c]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-sm font-black text-[#006b5c]">4</span>
+                  <div className="w-8 h-8 bg-[#800000]/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-sm font-black text-[#800000]">4</span>
                   </div>
                   <p className="text-sm text-[#575c60] leading-relaxed">
                     Aktifkan <strong className="text-[#2a2f32]">Panduan</strong> untuk melihat bentuk huruf transparan sebagai acuan.
@@ -501,7 +501,7 @@ function MenulisHijaiyah() {
             </div>
 
             {/* Huruf Info Card */}
-            <div className="bg-gradient-to-br from-[#006b5c] to-[#00897b] rounded-2xl p-6 text-white shadow-lg">
+            <div className="bg-gradient-to-br from-[#800000] to-[#00897b] rounded-2xl p-6 text-white shadow-lg">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                   <span className="text-2xl font-bold" style={{ fontFamily: "'Noto Naskh Arabic', 'Amiri', serif" }}>
@@ -558,7 +558,7 @@ function MenulisHijaiyah() {
           border-radius: 9999px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #006b5c;
+          background: #800000;
         }
       `}</style>
     </div>
