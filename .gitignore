@@ -14,6 +14,11 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
+.marscode/*
+.opencode/*
+.tanstack/*
+graphify-out/*
+AGENTS.md
 !.vscode/extensions.json
 .idea
 .DS_Store
