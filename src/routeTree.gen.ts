@@ -24,9 +24,9 @@ import { Route as SiswaIqraMadIndexRouteImport } from './routes/siswa/iqra/mad/i
 import { Route as SiswaIqraHijaiyahIndexRouteImport } from './routes/siswa/iqra/hijaiyah/index'
 import { Route as SiswaIqraHarakatIndexRouteImport } from './routes/siswa/iqra/harakat/index'
 import { Route as SiswaAyatPendekSurahIndexRouteImport } from './routes/siswa/ayat-pendek/$surah/index'
-import { Route as SiswaIqraHijaiyahLetterRouteImport } from './routes/siswa/iqra/hijaiyah/$letter'
+import { Route as SiswaIqraHijaiyahLetterIndexRouteImport } from './routes/siswa/iqra/hijaiyah/$letter/index'
 import { Route as SiswaAyatPendekIsyaratSurahIndexRouteImport } from './routes/siswa/ayat-pendek/isyarat/$surah/index'
-import { Route as SiswaIqraHijaiyahIsyaratLetterRouteImport } from './routes/siswa/iqra/hijaiyah/isyarat/$letter'
+import { Route as SiswaIqraHijaiyahIsyaratLetterIndexRouteImport } from './routes/siswa/iqra/hijaiyah/isyarat/$letter/index'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -106,21 +106,22 @@ const SiswaAyatPendekSurahIndexRoute =
     path: '/siswa/ayat-pendek/$surah/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SiswaIqraHijaiyahLetterRoute = SiswaIqraHijaiyahLetterRouteImport.update({
-  id: '/siswa/iqra/hijaiyah/$letter',
-  path: '/siswa/iqra/hijaiyah/$letter',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const SiswaIqraHijaiyahLetterIndexRoute =
+  SiswaIqraHijaiyahLetterIndexRouteImport.update({
+    id: '/siswa/iqra/hijaiyah/$letter/',
+    path: '/siswa/iqra/hijaiyah/$letter/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SiswaAyatPendekIsyaratSurahIndexRoute =
   SiswaAyatPendekIsyaratSurahIndexRouteImport.update({
     id: '/siswa/ayat-pendek/isyarat/$surah/',
     path: '/siswa/ayat-pendek/isyarat/$surah/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SiswaIqraHijaiyahIsyaratLetterRoute =
-  SiswaIqraHijaiyahIsyaratLetterRouteImport.update({
-    id: '/siswa/iqra/hijaiyah/isyarat/$letter',
-    path: '/siswa/iqra/hijaiyah/isyarat/$letter',
+const SiswaIqraHijaiyahIsyaratLetterIndexRoute =
+  SiswaIqraHijaiyahIsyaratLetterIndexRouteImport.update({
+    id: '/siswa/iqra/hijaiyah/isyarat/$letter/',
+    path: '/siswa/iqra/hijaiyah/isyarat/$letter/',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -132,7 +133,6 @@ export interface FileRoutesByFullPath {
   '/siswa/ayat-pendek/': typeof SiswaAyatPendekIndexRoute
   '/siswa/iqra/': typeof SiswaIqraIndexRoute
   '/siswa/menulis-hijaiyah/': typeof SiswaMenulisHijaiyahIndexRoute
-  '/siswa/iqra/hijaiyah/$letter': typeof SiswaIqraHijaiyahLetterRoute
   '/siswa/ayat-pendek/$surah/': typeof SiswaAyatPendekSurahIndexRoute
   '/siswa/iqra/harakat/': typeof SiswaIqraHarakatIndexRoute
   '/siswa/iqra/hijaiyah/': typeof SiswaIqraHijaiyahIndexRoute
@@ -140,8 +140,9 @@ export interface FileRoutesByFullPath {
   '/siswa/iqra/sambung-huruf/': typeof SiswaIqraSambungHurufIndexRoute
   '/siswa/iqra/sukun-tasydid/': typeof SiswaIqraSukunTasydidIndexRoute
   '/siswa/iqra/tanwin/': typeof SiswaIqraTanwinIndexRoute
-  '/siswa/iqra/hijaiyah/isyarat/$letter': typeof SiswaIqraHijaiyahIsyaratLetterRoute
   '/siswa/ayat-pendek/isyarat/$surah/': typeof SiswaAyatPendekIsyaratSurahIndexRoute
+  '/siswa/iqra/hijaiyah/$letter/': typeof SiswaIqraHijaiyahLetterIndexRoute
+  '/siswa/iqra/hijaiyah/isyarat/$letter/': typeof SiswaIqraHijaiyahIsyaratLetterIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,7 +152,6 @@ export interface FileRoutesByTo {
   '/siswa/ayat-pendek': typeof SiswaAyatPendekIndexRoute
   '/siswa/iqra': typeof SiswaIqraIndexRoute
   '/siswa/menulis-hijaiyah': typeof SiswaMenulisHijaiyahIndexRoute
-  '/siswa/iqra/hijaiyah/$letter': typeof SiswaIqraHijaiyahLetterRoute
   '/siswa/ayat-pendek/$surah': typeof SiswaAyatPendekSurahIndexRoute
   '/siswa/iqra/harakat': typeof SiswaIqraHarakatIndexRoute
   '/siswa/iqra/hijaiyah': typeof SiswaIqraHijaiyahIndexRoute
@@ -159,8 +159,9 @@ export interface FileRoutesByTo {
   '/siswa/iqra/sambung-huruf': typeof SiswaIqraSambungHurufIndexRoute
   '/siswa/iqra/sukun-tasydid': typeof SiswaIqraSukunTasydidIndexRoute
   '/siswa/iqra/tanwin': typeof SiswaIqraTanwinIndexRoute
-  '/siswa/iqra/hijaiyah/isyarat/$letter': typeof SiswaIqraHijaiyahIsyaratLetterRoute
   '/siswa/ayat-pendek/isyarat/$surah': typeof SiswaAyatPendekIsyaratSurahIndexRoute
+  '/siswa/iqra/hijaiyah/$letter': typeof SiswaIqraHijaiyahLetterIndexRoute
+  '/siswa/iqra/hijaiyah/isyarat/$letter': typeof SiswaIqraHijaiyahIsyaratLetterIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,7 +173,6 @@ export interface FileRoutesById {
   '/siswa/ayat-pendek/': typeof SiswaAyatPendekIndexRoute
   '/siswa/iqra/': typeof SiswaIqraIndexRoute
   '/siswa/menulis-hijaiyah/': typeof SiswaMenulisHijaiyahIndexRoute
-  '/siswa/iqra/hijaiyah/$letter': typeof SiswaIqraHijaiyahLetterRoute
   '/siswa/ayat-pendek/$surah/': typeof SiswaAyatPendekSurahIndexRoute
   '/siswa/iqra/harakat/': typeof SiswaIqraHarakatIndexRoute
   '/siswa/iqra/hijaiyah/': typeof SiswaIqraHijaiyahIndexRoute
@@ -180,8 +180,9 @@ export interface FileRoutesById {
   '/siswa/iqra/sambung-huruf/': typeof SiswaIqraSambungHurufIndexRoute
   '/siswa/iqra/sukun-tasydid/': typeof SiswaIqraSukunTasydidIndexRoute
   '/siswa/iqra/tanwin/': typeof SiswaIqraTanwinIndexRoute
-  '/siswa/iqra/hijaiyah/isyarat/$letter': typeof SiswaIqraHijaiyahIsyaratLetterRoute
   '/siswa/ayat-pendek/isyarat/$surah/': typeof SiswaAyatPendekIsyaratSurahIndexRoute
+  '/siswa/iqra/hijaiyah/$letter/': typeof SiswaIqraHijaiyahLetterIndexRoute
+  '/siswa/iqra/hijaiyah/isyarat/$letter/': typeof SiswaIqraHijaiyahIsyaratLetterIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -193,7 +194,6 @@ export interface FileRouteTypes {
     | '/siswa/ayat-pendek/'
     | '/siswa/iqra/'
     | '/siswa/menulis-hijaiyah/'
-    | '/siswa/iqra/hijaiyah/$letter'
     | '/siswa/ayat-pendek/$surah/'
     | '/siswa/iqra/harakat/'
     | '/siswa/iqra/hijaiyah/'
@@ -201,8 +201,9 @@ export interface FileRouteTypes {
     | '/siswa/iqra/sambung-huruf/'
     | '/siswa/iqra/sukun-tasydid/'
     | '/siswa/iqra/tanwin/'
-    | '/siswa/iqra/hijaiyah/isyarat/$letter'
     | '/siswa/ayat-pendek/isyarat/$surah/'
+    | '/siswa/iqra/hijaiyah/$letter/'
+    | '/siswa/iqra/hijaiyah/isyarat/$letter/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -212,7 +213,6 @@ export interface FileRouteTypes {
     | '/siswa/ayat-pendek'
     | '/siswa/iqra'
     | '/siswa/menulis-hijaiyah'
-    | '/siswa/iqra/hijaiyah/$letter'
     | '/siswa/ayat-pendek/$surah'
     | '/siswa/iqra/harakat'
     | '/siswa/iqra/hijaiyah'
@@ -220,8 +220,9 @@ export interface FileRouteTypes {
     | '/siswa/iqra/sambung-huruf'
     | '/siswa/iqra/sukun-tasydid'
     | '/siswa/iqra/tanwin'
-    | '/siswa/iqra/hijaiyah/isyarat/$letter'
     | '/siswa/ayat-pendek/isyarat/$surah'
+    | '/siswa/iqra/hijaiyah/$letter'
+    | '/siswa/iqra/hijaiyah/isyarat/$letter'
   id:
     | '__root__'
     | '/'
@@ -232,7 +233,6 @@ export interface FileRouteTypes {
     | '/siswa/ayat-pendek/'
     | '/siswa/iqra/'
     | '/siswa/menulis-hijaiyah/'
-    | '/siswa/iqra/hijaiyah/$letter'
     | '/siswa/ayat-pendek/$surah/'
     | '/siswa/iqra/harakat/'
     | '/siswa/iqra/hijaiyah/'
@@ -240,8 +240,9 @@ export interface FileRouteTypes {
     | '/siswa/iqra/sambung-huruf/'
     | '/siswa/iqra/sukun-tasydid/'
     | '/siswa/iqra/tanwin/'
-    | '/siswa/iqra/hijaiyah/isyarat/$letter'
     | '/siswa/ayat-pendek/isyarat/$surah/'
+    | '/siswa/iqra/hijaiyah/$letter/'
+    | '/siswa/iqra/hijaiyah/isyarat/$letter/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,7 +252,6 @@ export interface RootRouteChildren {
   SiswaAyatPendekIndexRoute: typeof SiswaAyatPendekIndexRoute
   SiswaIqraIndexRoute: typeof SiswaIqraIndexRoute
   SiswaMenulisHijaiyahIndexRoute: typeof SiswaMenulisHijaiyahIndexRoute
-  SiswaIqraHijaiyahLetterRoute: typeof SiswaIqraHijaiyahLetterRoute
   SiswaAyatPendekSurahIndexRoute: typeof SiswaAyatPendekSurahIndexRoute
   SiswaIqraHarakatIndexRoute: typeof SiswaIqraHarakatIndexRoute
   SiswaIqraHijaiyahIndexRoute: typeof SiswaIqraHijaiyahIndexRoute
@@ -259,8 +259,9 @@ export interface RootRouteChildren {
   SiswaIqraSambungHurufIndexRoute: typeof SiswaIqraSambungHurufIndexRoute
   SiswaIqraSukunTasydidIndexRoute: typeof SiswaIqraSukunTasydidIndexRoute
   SiswaIqraTanwinIndexRoute: typeof SiswaIqraTanwinIndexRoute
-  SiswaIqraHijaiyahIsyaratLetterRoute: typeof SiswaIqraHijaiyahIsyaratLetterRoute
   SiswaAyatPendekIsyaratSurahIndexRoute: typeof SiswaAyatPendekIsyaratSurahIndexRoute
+  SiswaIqraHijaiyahLetterIndexRoute: typeof SiswaIqraHijaiyahLetterIndexRoute
+  SiswaIqraHijaiyahIsyaratLetterIndexRoute: typeof SiswaIqraHijaiyahIsyaratLetterIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -370,11 +371,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiswaAyatPendekSurahIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/siswa/iqra/hijaiyah/$letter': {
-      id: '/siswa/iqra/hijaiyah/$letter'
+    '/siswa/iqra/hijaiyah/$letter/': {
+      id: '/siswa/iqra/hijaiyah/$letter/'
       path: '/siswa/iqra/hijaiyah/$letter'
-      fullPath: '/siswa/iqra/hijaiyah/$letter'
-      preLoaderRoute: typeof SiswaIqraHijaiyahLetterRouteImport
+      fullPath: '/siswa/iqra/hijaiyah/$letter/'
+      preLoaderRoute: typeof SiswaIqraHijaiyahLetterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/siswa/ayat-pendek/isyarat/$surah/': {
@@ -384,11 +385,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiswaAyatPendekIsyaratSurahIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/siswa/iqra/hijaiyah/isyarat/$letter': {
-      id: '/siswa/iqra/hijaiyah/isyarat/$letter'
+    '/siswa/iqra/hijaiyah/isyarat/$letter/': {
+      id: '/siswa/iqra/hijaiyah/isyarat/$letter/'
       path: '/siswa/iqra/hijaiyah/isyarat/$letter'
-      fullPath: '/siswa/iqra/hijaiyah/isyarat/$letter'
-      preLoaderRoute: typeof SiswaIqraHijaiyahIsyaratLetterRouteImport
+      fullPath: '/siswa/iqra/hijaiyah/isyarat/$letter/'
+      preLoaderRoute: typeof SiswaIqraHijaiyahIsyaratLetterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -413,7 +414,6 @@ const rootRouteChildren: RootRouteChildren = {
   SiswaAyatPendekIndexRoute: SiswaAyatPendekIndexRoute,
   SiswaIqraIndexRoute: SiswaIqraIndexRoute,
   SiswaMenulisHijaiyahIndexRoute: SiswaMenulisHijaiyahIndexRoute,
-  SiswaIqraHijaiyahLetterRoute: SiswaIqraHijaiyahLetterRoute,
   SiswaAyatPendekSurahIndexRoute: SiswaAyatPendekSurahIndexRoute,
   SiswaIqraHarakatIndexRoute: SiswaIqraHarakatIndexRoute,
   SiswaIqraHijaiyahIndexRoute: SiswaIqraHijaiyahIndexRoute,
@@ -421,8 +421,10 @@ const rootRouteChildren: RootRouteChildren = {
   SiswaIqraSambungHurufIndexRoute: SiswaIqraSambungHurufIndexRoute,
   SiswaIqraSukunTasydidIndexRoute: SiswaIqraSukunTasydidIndexRoute,
   SiswaIqraTanwinIndexRoute: SiswaIqraTanwinIndexRoute,
-  SiswaIqraHijaiyahIsyaratLetterRoute: SiswaIqraHijaiyahIsyaratLetterRoute,
   SiswaAyatPendekIsyaratSurahIndexRoute: SiswaAyatPendekIsyaratSurahIndexRoute,
+  SiswaIqraHijaiyahLetterIndexRoute: SiswaIqraHijaiyahLetterIndexRoute,
+  SiswaIqraHijaiyahIsyaratLetterIndexRoute:
+    SiswaIqraHijaiyahIsyaratLetterIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

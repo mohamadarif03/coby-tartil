@@ -65,7 +65,7 @@ function IqraSukunTasydid() {
           <nav aria-label="Breadcrumb" className="flex items-center mb-8 space-x-2 text-sm font-medium text-slate-500">
             <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
             <span className="text-base material-symbols-outlined">chevron_right</span>
-            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/iqra' }); }}>Iqra'</a>
+            <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa/iqra' }); }}>Iqra'</a>
             <span className="text-base material-symbols-outlined">chevron_right</span>
             <span className="text-[#800000] font-bold">Sukun & Tasydid</span>
           </nav>

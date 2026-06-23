@@ -21,7 +21,7 @@ function Hijaiyah() {
         <nav aria-label="Breadcrumb" className="flex items-center mb-8 space-x-2 text-sm font-medium text-slate-500">
           <a className="hover:text-[#800000] transition-colors cursor-pointer" onClick={() => navigate({ to: '/siswa' })}>Beranda</a>
           <span className="text-base material-symbols-outlined">chevron_right</span>
-          <a className="hover:text-[#800000] transition-colors cursor-pointer" onClick={() => navigate({ to: '/iqra' })}>Iqra'</a>
+          <a className="hover:text-[#800000] transition-colors cursor-pointer" onClick={() => navigate({ to: '/siswa/iqra' })}>Iqra'</a>
           <span className="text-base material-symbols-outlined">chevron_right</span>
           <span className="text-[#800000] font-bold">Huruf Hijaiyah</span>
         </nav>
@@ -49,7 +49,7 @@ function Hijaiyah() {
         {/* Grid Cards */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Card 1: Completed */}
-          <button aria-label="Huruf Alif, sudah selesai" onClick={() => navigate({ to: '/iqra/hijaiyah/alif' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
+          <button aria-label="Huruf Alif, sudah selesai" onClick={() => navigate({ to: '/siswa/iqra/hijaiyah/alif' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
             <div className="absolute top-4 right-4 text-[#800000]">
               <span className="text-3xl material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             </div>
@@ -59,7 +59,7 @@ function Hijaiyah() {
           </button>
 
           {/* Card 2: Completed */}
-          <button aria-label="Huruf Ba, sudah selesai" onClick={() => navigate({ to: '/iqra/hijaiyah/ba' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
+          <button aria-label="Huruf Ba, sudah selesai" onClick={() => navigate({ to: '/siswa/iqra/hijaiyah/ba' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
             <div className="absolute top-4 right-4 text-[#800000]">
               <span className="text-3xl material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             </div>
@@ -69,7 +69,7 @@ function Hijaiyah() {
           </button>
 
           {/* Card 3: Completed */}
-          <button aria-label="Huruf Ta, sudah selesai" onClick={() => navigate({ to: '/iqra/hijaiyah/ta' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
+          <button aria-label="Huruf Ta, sudah selesai" onClick={() => navigate({ to: '/siswa/iqra/hijaiyah/ta' })} className="group relative bg-[#dde3e8] rounded-xl p-8 flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/10 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
             <div className="absolute top-4 right-4 text-[#800000]">
               <span className="text-3xl material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             </div>
@@ -89,7 +89,7 @@ function Hijaiyah() {
           </button>
 
           {/* Card 5: Current/Next */}
-          <button aria-label="Huruf Jim, mulai belajar" onClick={() => navigate({ to: '/iqra/hijaiyah/jim' })} className="group relative bg-[#ffffff] rounded-xl p-8 flex flex-col items-center justify-center ring-4 ring-[#800000] ring-offset-4 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/20 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
+          <button aria-label="Huruf Jim, mulai belajar" onClick={() => navigate({ to: '/siswa/iqra/hijaiyah/jim' })} className="group relative bg-[#ffffff] rounded-xl p-8 flex flex-col items-center justify-center ring-4 ring-[#800000] ring-offset-4 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#800000]/20 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">
             <div className="absolute -top-3 -right-3 bg-[#fad538] text-[#5a4a00] text-[10px] font-black px-3 py-1 rounded-full shadow-md uppercase tracking-widest">Mulai</div>
             <span className="font-['Noto_Sans_Arabic'] text-7xl mb-4 text-[#2a2f32]">ج</span>
             <span className="font-['Plus_Jakarta_Sans'] font-bold text-xl text-[#2a2f32]">Jim</span>

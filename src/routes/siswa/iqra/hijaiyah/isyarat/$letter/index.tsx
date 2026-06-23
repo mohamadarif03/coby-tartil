@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/siswa/iqra/hijaiyah/isyarat/$letter')({
+export const Route = createFileRoute('/siswa/iqra/hijaiyah/isyarat/$letter/')({
   component: DetailHijaiyahIsyarat,
 })
 
@@ -13,7 +13,7 @@ const { Hands, HAND_CONNECTIONS, Camera, drawConnectors, drawLandmarks } = windo
 
 function DetailHijaiyahIsyarat() {
     const navigate = useNavigate();
-    const { letter } = useParams({ from: '/iqra/hijaiyah/isyarat/$letter' });
+    const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/isyarat/$letter' });
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");
@@ -113,11 +113,11 @@ function DetailHijaiyahIsyarat() {
             <main className="w-full p-6 pb-32 ml-72 md:p-12" id="main-content" role="main">
                 {/* Breadcrumb */}
                 <nav className="mb-8 flex items-center gap-2 text-sm text-[#575c60] font-medium">
-                    <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Beranda</span>
+                    <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex={0}>Beranda</span>
                     <span className="text-sm material-symbols-outlined">chevron_right</span>
-                    <span onClick={() => navigate({ to: '/iqra' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Iqra'</span>
+                    <span onClick={() => navigate({ to: '/siswa/iqra' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex={0}>Iqra'</span>
                     <span className="text-sm material-symbols-outlined">chevron_right</span>
-                    <span onClick={() => navigate({ to: '/iqra/hijaiyah' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Hijaiyah</span>
+                    <span onClick={() => navigate({ to: '/siswa/iqra/hijaiyah' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex={0}>Hijaiyah</span>
                     <span className="text-sm material-symbols-outlined">chevron_right</span>
                     <span className="text-[#800000] font-bold">Ba (Isyarat)</span>
                 </nav>
@@ -200,7 +200,7 @@ function DetailHijaiyahIsyarat() {
 
                         {/* Navigation Controls */}
                         <div className="flex items-center justify-between gap-6">
-                            <button onClick={() => navigate({ to: '/iqra/hijaiyah' })} className="flex items-center gap-4 px-6 py-4 bg-[#white] hover:bg-[#ecf1f6] border border-[#800000]/20 text-[#800000] font-black rounded-full transition-all hover:-translate-x-2 w-1/3 justify-center shadow-sm font-['Plus_Jakarta_Sans']">
+                            <button onClick={() => navigate({ to: '/siswa/iqra/hijaiyah' })} className="flex items-center gap-4 px-6 py-4 bg-[#white] hover:bg-[#ecf1f6] border border-[#800000]/20 text-[#800000] font-black rounded-full transition-all hover:-translate-x-2 w-1/3 justify-center shadow-sm font-['Plus_Jakarta_Sans']">
                                 <span className="text-lg material-symbols-outlined">arrow_back</span>
                                 Kembali
                             </button>

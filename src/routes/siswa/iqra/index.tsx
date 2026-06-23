@@ -162,7 +162,7 @@ function Iqra() {
             {lessons.map((lesson) => (
               <button
                 key={lesson.id}
-                onClick={() => navigate({ to: `/iqra/${lesson.id}` })}
+                onClick={() => navigate({ to: `/siswa/iqra/${lesson.id}` })}
                 aria-label={lesson.title}
                 className={`group relative bg-white rounded-2xl p-7 flex flex-col text-left transition-all duration-500 hover:scale-[1.02] ${lesson.hoverShadow} hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 border ${lesson.borderColor} border-opacity-50`}
               >

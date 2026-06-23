@@ -4,13 +4,13 @@ import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import useAccessibility from '@/hooks/use-accessibility';
 
-export const Route = createFileRoute('/siswa/iqra/hijaiyah/$letter')({
+export const Route = createFileRoute('/siswa/iqra/hijaiyah/$letter/')({
   component: DetailHijaiyah,
 })
 
 function DetailHijaiyah() {
   const navigate = useNavigate();
-  const { letter } = useParams({ from: '/iqra/hijaiyah/$letter' });
+  const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/$letter' });
   useAccessibility(`Detail Huruf Hijaiyah ${letter}`);
 
   // 2. Buat fungsi untuk memutar audio
@@ -30,9 +30,9 @@ function DetailHijaiyah() {
           <nav className="mb-8 flex items-center gap-2 text-sm font-medium text-[#575c60]">
             <a className="hover:text-[#800000] cursor-pointer" onClick={() => navigate({ to: '/siswa' })}>Beranda</a>
             <span className="text-xs material-symbols-outlined">chevron_right</span>
-            <a className="hover:text-[#800000] cursor-pointer" onClick={() => navigate({ to: '/iqra' })}>Iqra'</a>
+            <a className="hover:text-[#800000] cursor-pointer" onClick={() => navigate({ to: '/siswa/iqra' })}>Iqra'</a>
             <span className="text-xs material-symbols-outlined">chevron_right</span>
-            <a className="hover:text-[#800000] cursor-pointer" onClick={() => navigate({ to: '/iqra/hijaiyah' })}>Hijaiyah</a>
+            <a className="hover:text-[#800000] cursor-pointer" onClick={() => navigate({ to: '/siswa/iqra/hijaiyah' })}>Hijaiyah</a>
             <span className="text-xs material-symbols-outlined">chevron_right</span>
             <span className="text-[#800000] font-bold">Ba</span>
           </nav>
