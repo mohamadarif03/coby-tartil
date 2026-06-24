@@ -10,7 +10,7 @@ export const Route = createFileRoute('/siswa/iqra/hijaiyah/$letter/')({
 
 function DetailHijaiyah() {
   const navigate = useNavigate();
-  const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/$letter' });
+  const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/$letter/' });
   useAccessibility(`Detail Huruf Hijaiyah ${letter}`);
 
   // 2. Buat fungsi untuk memutar audio

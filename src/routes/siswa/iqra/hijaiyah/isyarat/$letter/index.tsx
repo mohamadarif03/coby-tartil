@@ -13,7 +13,7 @@ const { Hands, HAND_CONNECTIONS, Camera, drawConnectors, drawLandmarks } = windo
 
 function DetailHijaiyahIsyarat() {
     const navigate = useNavigate();
-    const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/isyarat/$letter' });
+    const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/isyarat/$letter/' });
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");

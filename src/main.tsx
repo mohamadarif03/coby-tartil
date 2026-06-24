@@ -3,8 +3,12 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import '@/index.css'
 
-// Import the generated route tree
 import { routeTree } from '@/routeTree.gen'
+import z from 'zod'
+import { id } from 'zod/v4/locales'
+
+// config
+z.config(id())
 
 // Create a new router instance
 const router = createRouter({ routeTree })

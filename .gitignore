@@ -27,3 +27,4 @@ AGENTS.md
 *.njsproj
 *.sln
 *.sw?
+.env*
