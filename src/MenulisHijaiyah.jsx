@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Sidebar from './Sidebar';
 import useAccessibility from './useAccessibility';
+import { loadWritingModel, classifyCanvas } from './writingModel';
 
 const HIJAIYAH_LETTERS = [
   { letter: 'ا', name: 'Alif' },
@@ -56,7 +57,24 @@ function MenulisHijaiyah() {
   const [isEraser, setIsEraser] = useState(false);
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [checkResult, setCheckResult] = useState(null); // { label, confidence, correct }
+  const [isChecking, setIsChecking] = useState(false);
   const lastPos = useRef(null);
+
+  const checkWriting = useCallback(async () => {
+    const canvas = canvasRef.current;
+    if (!canvas || isChecking) return;
+    setIsChecking(true);
+    setCheckResult(null);
+    try {
+      const res = await classifyCanvas(canvas, selectedLetter.letter);
+      setCheckResult({ label: selectedLetter.name, confidence: res.score, correct: res.correct });
+    } catch {
+      setCheckResult({ label: null, confidence: 0, correct: false, error: true });
+    } finally {
+      setIsChecking(false);
+    }
+  }, [selectedLetter, isChecking]);
 
   // Initialize canvas
   useEffect(() => {
@@ -242,6 +260,7 @@ function MenulisHijaiyah() {
   // Clear canvas when letter changes
   useEffect(() => {
     clearCanvas();
+    setCheckResult(null);
   }, [selectedLetter, clearCanvas]);
 
   return (
@@ -414,6 +433,19 @@ function MenulisHijaiyah() {
                   >
                     <span className="material-symbols-outlined text-lg" aria-hidden="true">delete</span>
                   </button>
+
+                  {/* Check Writing */}
+                  <button
+                    onClick={checkWriting}
+                    disabled={isChecking || historyIndex < 0}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-[#D4A017] bg-[#006b5c] text-white hover:bg-[#00897b] disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Periksa tulisan dengan AI"
+                  >
+                    <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                      {isChecking ? 'hourglass_empty' : 'check_circle'}
+                    </span>
+                    Periksa
+                  </button>
                 </div>
               </div>
 
@@ -453,6 +485,39 @@ function MenulisHijaiyah() {
                   role="img"
                 />
               </div>
+
+              {/* AI Check Result */}
+              {checkResult && (
+                <div className={`mt-4 mx-5 mb-5 p-4 rounded-xl flex items-center gap-3 ${
+                  checkResult.error
+                    ? 'bg-[#ecf1f6] text-[#575c60]'
+                    : checkResult.correct
+                      ? 'bg-green-50 border border-green-200'
+                      : 'bg-red-50 border border-red-200'
+                }`}>
+                  <span className={`material-symbols-outlined text-2xl ${
+                    checkResult.error ? 'text-[#a9aeb1]'
+                      : checkResult.correct ? 'text-green-600' : 'text-red-500'
+                  }`}>
+                    {checkResult.error ? 'info' : checkResult.correct ? 'check_circle' : 'cancel'}
+                  </span>
+                  <div>
+                    {checkResult.error ? (
+                      <p className="text-sm font-bold">Model belum tersedia</p>
+                    ) : checkResult.correct ? (
+                      <>
+                        <p className="text-sm font-bold text-green-700">Benar! Huruf {selectedLetter.name} terdeteksi</p>
+                        <p className="text-xs text-green-600 mt-0.5">Keyakinan: {(checkResult.confidence * 100).toFixed(0)}%</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm font-bold text-red-600">Belum tepat — coba lagi</p>
+                        <p className="text-xs text-red-500 mt-0.5">Terdeteksi: {checkResult.label ?? '?'} ({(checkResult.confidence * 100).toFixed(0)}%)</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

@@ -1,21 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import mascotImg from './assets/maskot.png';
 import useAccessibility from './useAccessibility';
+import audioBaa from './hijaiyah/baa.mp3';
+import { useRecorder } from './useRecorder';
+import { transcribeAudio } from './audioService';
 
-// 1. Import file audio-nya (Sesuaikan path './hijaiyah/baa.mp3' dengan struktur foldermu)
-import audioBaa from './hijaiyah/baa.mp3'; 
+// Target letter info — hardcoded to Ba for now
+const LETTER = { arabic: 'ب', name: 'Ba', nameAr: 'باء' };
 
 function DetailHijaiyah() {
   const navigate = useNavigate();
   useAccessibility('Detail Huruf Hijaiyah');
+  const { isRecording, start } = useRecorder();
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [speechResult, setSpeechResult] = useState(null);
 
-  // 2. Buat fungsi untuk memutar audio
-  const playAudio = () => {
-    const audio = new Audio(audioBaa);
-    audio.play().catch(error => console.error("Gagal memutar audio:", error));
+  // only strip harakat (U+064B–U+065F), not base Arabic letters
+  const stripDiacritics = (s) => s.replace(/[ً-ٟؐ-ؚٰ]/g, '');
+
+  const playAudio = () => new Audio(audioBaa).play().catch(console.error);
+
+  const handleBlob = async (blob) => {
+    setIsTranscribing(true);
+    setSpeechResult(null);
+    try {
+      const t = await transcribeAudio(blob);
+      const clean = stripDiacritics(t);
+      const target = stripDiacritics(LETTER.nameAr);
+      const correct = clean.includes(target) || target.includes(clean);
+      setSpeechResult({ correct, transcript: t });
+    } catch (e) {
+      setSpeechResult({ correct: false, error: true, transcript: e.message });
+    } finally {
+      setIsTranscribing(false);
+    }
   };
+
+  const toggleListening = async () => {
+    if (isRecording || isTranscribing) return;
+    setSpeechResult(null);
+    await start(handleBlob);
+  };
+
+  const isListening = isRecording || isTranscribing;
 
   return (
     <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body flex">
@@ -70,11 +99,25 @@ function DetailHijaiyah() {
               {/* Exercise Section */}
               <section className="w-full mt-12 bg-[#ecf1f6] rounded-xl p-8 flex flex-col items-center text-center">
                 <h2 className="text-2xl font-black text-[#2a2f32] mb-2 font-['Plus_Jakarta_Sans']">Sekarang Giliranmu!</h2>
-                <p className="text-[#575c60] mb-8 max-w-xs font-['Plus_Jakarta_Sans']">Tekan tombol rekam, lalu ucapkan huruf ini</p>
+                <p className="text-[#575c60] mb-8 max-w-xs font-['Plus_Jakarta_Sans']">Tekan tombol, lalu ucapkan huruf ini</p>
                 <div className="flex flex-col items-center gap-6">
-                  <button aria-label="Mulai rekam suara" className="w-24 h-24 rounded-full bg-[#b31b25] flex items-center justify-center text-[#ffefee] shadow-lg hover:shadow-red-500/30 hover:scale-105 transition-all group active:ring-8 active:ring-red-500/20">
-                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">mic</span>
+                  <button
+                    aria-label={isListening ? 'Berhenti' : 'Mulai bicara'}
+                    onClick={toggleListening}
+                    className={`w-24 h-24 rounded-full flex items-center justify-center text-[#ffefee] shadow-lg hover:scale-105 transition-all group active:ring-8 active:ring-red-500/20 ${isListening ? 'bg-red-600 animate-pulse' : 'bg-[#b31b25]'}`}
+                  >
+                    <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">{isListening ? 'stop' : 'mic'}</span>
                   </button>
+                  {speechResult && (
+                    <div className="text-center">
+                      <p className={`font-bold text-lg ${speechResult.correct ? 'text-green-600' : 'text-red-500'}`}>
+                        {speechResult.correct ? '✅ Benar!' : speechResult.error ? '❌ Error' : '❌ Coba lagi!'}
+                      </p>
+                      {speechResult.transcript && (
+                        <p className="text-sm text-[#575c60] mt-1">Terdengar: <span className="font-bold">{speechResult.transcript}</span></p>
+                      )}
+                    </div>
+                  )}
                   {/* Audio Wave Visualizer */}
                   <div className="flex items-center gap-1 h-8 opacity-40">
                     <div className="audio-wave-bar w-1.5 bg-[#006b5c] rounded-full"></div>

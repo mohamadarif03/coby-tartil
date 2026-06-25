@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import mascotImg from './assets/maskot.png';
-import useAccessibility from './useAccessibility'; // ADDED
-import { analyzeRecitation } from './geminiService'; // AI Analysis
+import useAccessibility from './useAccessibility';
+import { useRecorder } from './useRecorder';
+import { transcribeAudio } from './audioService';
 
 function DetailAyat() {
   const navigate = useNavigate();
@@ -90,100 +91,36 @@ function DetailAyat() {
     }
   };
 
-  // ===== RECORDING & AI ANALYSIS =====
-  const [isRecording, setIsRecording] = useState(false);
+  const { isRecording, start } = useRecorder();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [aiResult, setAiResult] = useState(null);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
+  const [speechResult, setSpeechResult] = useState(null);
+  const isListening = isRecording || isAnalyzing;
 
-  const startRecording = async () => {
+  const stripDiacritics = (s) => s.replace(/[\u064B-\u065F\u0610-\u061A\u0670]/g, '');
+
+  const handleBlob = async (blob) => {
+    setIsAnalyzing(true);
+    setSpeechResult(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-          ? 'audio/webm;codecs=opus'
-          : 'audio/webm',
-      });
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        // Stop semua tracks microphone
-        stream.getTracks().forEach(track => track.stop());
-
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: mediaRecorder.mimeType,
-        });
-
-        // Kirim ke Gemini untuk analisis
-        setIsAnalyzing(true);
-        const result = await analyzeRecitation(
-          audioBlob,
-          verse.arabic,
-          verse.transliteration
-        );
-        setAiResult(result);
-        setIsAnalyzing(false);
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
-      setAiResult(null); // Reset hasil sebelumnya
-    } catch (error) {
-      console.error('Gagal mengakses mikrofon:', error);
-      setAiResult({
-        rating: 0,
-        feedback: 'Coby tidak bisa mengakses mikrofon kamu. Pastikan izin mikrofon sudah diberikan ya! 🎤',
-        details: ['Periksa pengaturan izin mikrofon di browser'],
-        pronunciationScore: 0,
-        tajweedNotes: '',
-        error: true,
-      });
+      const transcript = await transcribeAudio(blob);
+      const correct = stripDiacritics(transcript).includes(stripDiacritics(verse.arabic)) || stripDiacritics(verse.arabic).includes(stripDiacritics(transcript));
+      setSpeechResult({ correct, transcript });
+    } catch {
+      setSpeechResult({ correct: false, transcript: '', error: true });
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
+  const toggleListening = async () => {
+    if (isRecording || isAnalyzing) return;
+    setSpeechResult(null);
+    await start(handleBlob);
   };
 
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  };
-
-  // Helper: render bintang rating
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span
-          key={i}
-          className={`material-symbols-outlined ${i <= rating ? 'text-[#ffbe0b]' : 'text-[#dde3e8]'}`}
-          style={{ fontVariationSettings: i <= rating ? "'FILL' 1" : "'FILL' 0" }}
-        >
-          star
-        </span>
-      );
-    }
-    return stars;
-  };
-
-  // Tentukan feedback yang ditampilkan
-  const displayFeedback = aiResult ? aiResult.feedback : verse.cobyFeedback;
-  const displayRating = aiResult ? aiResult.rating : 4;
+  const displayFeedback = speechResult
+    ? speechResult.correct ? verse.cobyFeedback : 'Hmm, coba sekali lagi ya! Bacaannya belum tepat. 🎤'
+    : verse.cobyFeedback;
 
   return (
     <div className="bg-[#f3f7fb] text-[#2a2f32] siswa-body min-h-screen flex">
@@ -270,10 +207,8 @@ function DetailAyat() {
               </div>
               
               {/* FEEDBACK BUBBLE */}
-              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isAnalyzing ? 'border-yellow-300/50 animate-pulse' : aiResult && !aiResult.error ? 'border-[#006b5c]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
-                
-                {isAnalyzing ? (
-                  // Loading state
+              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isListening ? 'border-yellow-300/50 animate-pulse' : speechResult?.correct ? 'border-[#006b5c]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
+                {isListening ? (
                   <div className="flex flex-col items-center gap-3">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-[#006b5c] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
@@ -283,51 +218,16 @@ function DetailAyat() {
                     <p className="text-[#006b5c] font-bold text-lg">Coby sedang mendengarkan... 🎧</p>
                   </div>
                 ) : (
-                  // Feedback content
                   <>
-                    <div className="flex gap-1 mb-3">
-                      {renderStars(displayRating)}
-                    </div>
-                    <p className="text-[#006b5c] font-bold text-lg leading-snug mb-2">
-                      {displayFeedback}
-                    </p>
-                    
-                    {/* Detail koreksi dari AI */}
-                    {aiResult && aiResult.details && aiResult.details.length > 0 && (
-                      <div className="mt-4 space-y-2">
-                        {aiResult.details.map((detail, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <span className="material-symbols-outlined text-sm text-[#ffc78e] mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>
-                              {aiResult.error ? 'info' : 'tips_and_updates'}
-                            </span>
-                            <p className="text-sm text-[#575c60] leading-relaxed">{detail}</p>
-                          </div>
-                        ))}
-                      </div>
+                    {speechResult && (
+                      <span className={`material-symbols-outlined text-3xl mb-3 block ${speechResult.correct ? 'text-green-500' : 'text-red-400'}`}
+                        style={{ fontVariationSettings: "'FILL' 1" }}>
+                        {speechResult.correct ? 'check_circle' : 'cancel'}
+                      </span>
                     )}
-                    
-                    {/* Skor & Catatan Tajwid */}
-                    {aiResult && !aiResult.error && aiResult.pronunciationScore > 0 && (
-                      <div className="mt-4 pt-4 border-t border-[#dde3e8]">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-bold text-[#575c60] uppercase tracking-wider">Skor Pelafalan</span>
-                          <span className="text-lg font-black text-[#006b5c]">{aiResult.pronunciationScore}/100</span>
-                        </div>
-                        <div className="h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
-                          <div 
-                            className="h-full rounded-full transition-all duration-1000" 
-                            style={{ 
-                              width: `${aiResult.pronunciationScore}%`,
-                              backgroundColor: aiResult.pronunciationScore >= 80 ? '#006b5c' : aiResult.pronunciationScore >= 50 ? '#ffc78e' : '#ef4444' 
-                            }}
-                          ></div>
-                        </div>
-                        {aiResult.tajweedNotes && (
-                          <p className="mt-3 text-xs text-[#575c60] italic">
-                            📖 {aiResult.tajweedNotes}
-                          </p>
-                        )}
-                      </div>
+                    <p className="text-[#006b5c] font-bold text-lg leading-snug">{displayFeedback}</p>
+                    {speechResult?.unsupported && (
+                      <p className="text-xs text-[#a9aeb1] mt-2">Browser tidak mendukung Speech Recognition.</p>
                     )}
                   </>
                 )}
@@ -346,20 +246,15 @@ function DetailAyat() {
                 </span>
                 {isPlaying ? 'Berhenti' : 'Dengarkan'}
               </button>
-              <button 
-                aria-label={isRecording ? 'Berhenti merekam suara' : isAnalyzing ? 'Menunggu analisis AI' : 'Mulai merekam bacaan'} 
-                onClick={toggleRecording}
-                disabled={isAnalyzing}
-                className={`flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  isRecording 
-                    ? 'bg-red-500 text-white shadow-red-500/20 animate-pulse' 
-                    : 'bg-[#ffc78e] text-[#6a4800] shadow-[#ffc78e]/20'
+              <button
+                aria-label={isListening ? 'Berhenti mendengarkan' : 'Mulai bacaan'}
+                onClick={toggleListening}
+                className={`flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#D4A017] focus:ring-offset-2 ${
+                  isListening ? 'bg-red-500 text-white shadow-red-500/20 animate-pulse' : 'bg-[#ffc78e] text-[#6a4800] shadow-[#ffc78e]/20'
                 }`}
               >
-                <span className="material-symbols-outlined text-3xl">
-                  {isRecording ? 'stop' : isAnalyzing ? 'hourglass_top' : 'mic'}
-                </span>
-                {isRecording ? 'Berhenti Rekam' : isAnalyzing ? 'Menganalisis...' : 'Mulai Rekam'}
+                <span className="material-symbols-outlined text-3xl">{isListening ? 'stop' : 'mic'}</span>
+                {isListening ? 'Berhenti' : 'Mulai Bicara'}
               </button>
               <button 
                 aria-label="Beralih ke mode isyarat (kamera)" 
@@ -395,27 +290,12 @@ function DetailAyat() {
               {isFirst ? "Kembali" : "Ayat Sebelumnya"}
             </button>
             
-            {/* RECORDING WAVEFORM SIMULATION */}
             <div className="flex items-center gap-1">
-              {isRecording ? (
-                // Animasi pulse saat merekam
-                <>
-                  <div className="w-1 h-4 bg-red-500/60 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-8 bg-red-500/80 rounded-full animate-pulse" style={{animationDelay: '100ms'}}></div>
-                  <div className="w-1 h-12 bg-red-500 rounded-full animate-pulse" style={{animationDelay: '200ms'}}></div>
-                  <div className="w-1 h-6 bg-red-500/70 rounded-full animate-pulse" style={{animationDelay: '150ms'}}></div>
-                  <div className="w-1 h-2 bg-red-500/40 rounded-full animate-pulse" style={{animationDelay: '50ms'}}></div>
-                  <span className="ml-2 text-xs font-bold text-red-500 uppercase tracking-widest animate-pulse">REC</span>
-                </>
-              ) : (
-                <>
-                  <div className="w-1 h-4 bg-[#006b5c]/30 rounded-full"></div>
-                  <div className="w-1 h-8 bg-[#006b5c]/40 rounded-full"></div>
-                  <div className="w-1 h-12 bg-[#006b5c] rounded-full"></div>
-                  <div className="w-1 h-6 bg-[#006b5c]/50 rounded-full"></div>
-                  <div className="w-1 h-2 bg-[#006b5c]/20 rounded-full"></div>
-                </>
-              )}
+              {[4,8,12,6,2].map((h, i) => (
+                <div key={i} className={`w-1 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-[#006b5c]'}`}
+                  style={{ height: `${h * (isListening ? 1 : 0.5)}px`, animationDelay: `${i * 50}ms` }} />
+              ))}
+              {isListening && <span className="ml-2 text-xs font-bold text-red-500 uppercase tracking-widest animate-pulse">LIVE</span>}
             </div>
             
             <button aria-label="Next verse" onClick={handleNext} className="flex items-center gap-3 bg-[#ffffff] text-[#006b5c] font-bold px-8 py-4 rounded-xl hover:bg-[#006b5c] hover:text-white shadow-sm hover:shadow-md transition-all group border border-transparent">

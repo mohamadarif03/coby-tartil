@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 import maskot from './assets/maskot.png';
+import { loadHandsignModel, classifyLandmarks } from './handsignModel';
 
-import baHandsign from './hijaiyah/baa.png'; 
+import baHandsign from './hijaiyah/baa.png';
 
 // Import MediaPipe from window since it is injected via CDN
 const { Hands, HAND_CONNECTIONS, Camera, drawConnectors, drawLandmarks } = window;
@@ -13,6 +14,7 @@ const DetailHijaiyahIsyarat = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");
+    const lastUpdateRef = useRef(0);
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -25,6 +27,11 @@ const DetailHijaiyahIsyarat = () => {
             return;
         }
 
+        // Preload the ONNX model in the background
+        loadHandsignModel().catch(() => {
+            // ponytail: model may not exist yet (pre-training); fall back silently
+        });
+
         const hands = new window.Hands({
             locateFile: (file) => {
                 return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
@@ -33,7 +40,7 @@ const DetailHijaiyahIsyarat = () => {
 
         hands.setOptions({
             maxNumHands: 1,
-            modelComplexity: 1,
+            modelComplexity: 0,   // must match training/01_extract_landmarks.py
             minDetectionConfidence: 0.7,
             minTrackingConfidence: 0.7
         });
@@ -41,36 +48,30 @@ const DetailHijaiyahIsyarat = () => {
         hands.onResults((results) => {
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
+
             // Draw camera feed mirrored
             canvasCtx.translate(canvasElement.width, 0);
             canvasCtx.scale(-1, 1);
             canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
             if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                setStatusMsg("Tangan terdeteksi");
                 for (const landmarks of results.multiHandLandmarks) {
-                    window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 4 });
-                    window.drawLandmarks(canvasCtx, landmarks, { color: '#FF0000', lineWidth: 2 });
-                    
-                    // Deteksi huruf Alif sederhana (Telunjuk lurus ke atas, jari lain mengepal)
-                    const indexTip = landmarks[8];
-                    const indexPip = landmarks[6];
-                    const middleTip = landmarks[12];
-                    const middlePip = landmarks[10];
-                    const ringTip = landmarks[16];
-                    const ringPip = landmarks[14];
-                    const pinkyTip = landmarks[20];
-                    const pinkyPip = landmarks[18];
+                    window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 1 });
+                    window.drawLandmarks(canvasCtx, landmarks, { color: '#FF0000', lineWidth: 1, radius: 2 });
 
-                    const isIndexUp = indexTip.y < indexPip.y;
-                    const isMiddleDown = middleTip.y > middlePip.y;
-                    const isRingDown = ringTip.y > ringPip.y;
-                    const isPinkyDown = pinkyTip.y > pinkyPip.y;
-
-                    if (isIndexUp && isMiddleDown && isRingDown && isPinkyDown) {
-                        setStatusMsg("✅ Gestur Ba Terdeteksi!");
-                    }
+                    const now = Date.now();
+                    if (now - lastUpdateRef.current < 1000) continue;
+                    lastUpdateRef.current = now;
+                    classifyLandmarks(landmarks, "ba").then((res) => {
+                        if (!res) return;
+                        if (res.correct) {
+                            setStatusMsg(`✅ Gestur Ba Terdeteksi! (${(res.confidence * 100).toFixed(0)}%)`);
+                        } else {
+                            setStatusMsg(`Terdeteksi: ${res.label} — coba lagi`);
+                        }
+                    }).catch(() => {
+                        // ponytail: model not yet trained; no-op
+                    });
                 }
             } else {
                 setStatusMsg("Memindai gestur tangan...");
@@ -80,14 +81,16 @@ const DetailHijaiyahIsyarat = () => {
 
         const camera = new window.Camera(videoElement, {
             onFrame: async () => {
-                if (canvasElement) {
+                if (!canvasElement) return;
+                // ponytail: only resize on dimension change, not every frame
+                if (canvasElement.width !== videoElement.videoWidth)
                     canvasElement.width = videoElement.videoWidth;
+                if (canvasElement.height !== videoElement.videoHeight)
                     canvasElement.height = videoElement.videoHeight;
-                    await hands.send({ image: videoElement });
-                }
+                await hands.send({ image: videoElement });
             },
-            width: 640,
-            height: 480
+            width: 320,
+            height: 240
         });
 
         camera.start().catch((err) => {
