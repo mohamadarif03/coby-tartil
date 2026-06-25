@@ -1,12 +1,15 @@
 import { useNavigate, Link } from '@tanstack/react-router';
-import { StudentSidebarDatas } from '@/consts/sidebar-data';
+import { StudentSidebarDatas, TeacherSidebarDatas } from '@/consts/sidebar-data';
+import { SidebarType } from '@/types/sidebar-type';
 
 interface SidebarProps {
   activeMenu: string;
+  role?: 'student' | 'teacher';
 }
 
-function Sidebar({ activeMenu }: SidebarProps) {
+function Sidebar({ activeMenu, role = 'student' }: SidebarProps) {
   const navigate = useNavigate();
+  const sidebarData: SidebarType[] = role === 'teacher' ? TeacherSidebarDatas : StudentSidebarDatas;
 
   const getLinkClass = (menuName: string) => {
     const focusRing = "focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2";
@@ -29,7 +32,7 @@ function Sidebar({ activeMenu }: SidebarProps) {
       </div>
 
       <nav className="flex-1 overflow-y-auto" aria-label="Menu Utama">
-        {StudentSidebarDatas.map((item) => (
+        {sidebarData.map((item) => (
           <Link to={item.url} key={item.title} className={getLinkClass(item.title)} aria-label={item.title} aria-current={activeMenu === item.title ? 'page' : undefined}>
             <span className="material-symbols-outlined" aria-hidden="true">{item.icon}</span>
             <span>{item.title}</span>

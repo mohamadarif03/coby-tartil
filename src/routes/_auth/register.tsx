@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { RoleType } from '@/types/roles-type';
-import { RoleEnum } from '@/enums/roles-enum';
+import { ROLE } from '@/enums/roles-enum';
 
 export const Route = createFileRoute('/_auth/register')({
   component: RouteComponent,
@@ -12,7 +11,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<RoleType | null>(null);
+  const [role, setRole] = useState<ROLE | null>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -34,9 +33,9 @@ function RouteComponent() {
     }
   };
 
-  const roles: { id: RoleType; label: string; icon: string; description: string }[] = [
-    { id: RoleEnum.STUDENT, label: 'Siswa', icon: 'school', description: 'Belajar mengaji interaktif' },
-    { id: RoleEnum.TEACHER, label: 'Guru', icon: 'supervisor_account', description: 'Pantau & bimbing siswa' },
+  const roles: { id: ROLE; label: string; icon: string; description: string }[] = [
+    { id: ROLE.STUDENT, label: 'Siswa', icon: 'school', description: 'Belajar mengaji interaktif' },
+    { id: ROLE.TEACHER, label: 'Guru', icon: 'supervisor_account', description: 'Pantau & bimbing siswa' },
   ];
 
   return (

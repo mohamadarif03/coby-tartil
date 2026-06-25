@@ -5,9 +5,12 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vite.dev/config/
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     react(),
     TanStackRouterVite(),
-    tsconfigPaths(),
+    // tsconfigPaths(),
   ],
 })
