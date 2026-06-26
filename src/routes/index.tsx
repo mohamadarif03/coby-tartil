@@ -1,12 +1,49 @@
 import { createFileRoute } from '@tanstack/react-router'
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Outlet } from '@tanstack/react-router';
+import { useAuthStore } from '@/stores/auth-store'
+import { ROLE } from '@/enums/roles-enum'
 import '@/index.css';
+import { useLogout } from '@/hooks/use-auth-fetch';
 
 export const Route = createFileRoute('/')({
   component: App,
 })
 
+
+function AuthNav() {
+  const navigate = useNavigate();
+  const { isAuthenticated, role } = useAuthStore();
+  const { trigger: logout, isMutating: isLoggingOut } = useLogout();
+
+  if (isAuthenticated) {
+    const roleName = role === ROLE.TEACHER ? 'Guru' : 'Siswa';
+    const dashboardRoute = role === ROLE.TEACHER ? '/guru' : '/siswa';
+
+    return (
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => navigate({ to: dashboardRoute })}
+          className="px-6 py-2 rounded-full text-red-900 font-medium bg-[#ffd700] hover:bg-[#ffd700]/70 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2"
+          aria-label={`Buka halaman ${roleName}`}
+        >
+          Dashboard {roleName}
+        </button>
+        <button disabled={isLoggingOut} onClick={() => logout()} className="px-6 py-2 rounded-full border border-outline-variant/40 text-white font-medium hover:bg-white/10 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" aria-label="Keluar akun">Keluar</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <button onClick={() => navigate({ to: '/register' })} className="px-6 py-2 rounded-full text-red-900 font-medium bg-[#ffd700] hover:bg-[#ffd700]/70 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" aria-label="Daftar akun baru">Daftar</button>
+      <button onClick={() => navigate({ to: '/login' })} className="px-6 py-2 rounded-full border border-outline-variant/40 text-white font-medium hover:bg-white/10 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" aria-label="Masuk ke akun">Masuk</button>
+      <button onClick={() => navigate({ to: '/siswa' })} className="px-4 py-2 text-sm text-white/70 hover:text-white underline underline-offset-4 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 rounded" aria-label="Masuk sebagai tamu">
+        Masuk sebagai Tamu
+      </button>
+    </div>
+  );
+}
 
 function App() {
   const navigate = useNavigate();
@@ -59,13 +96,13 @@ function App() {
   }, [showCobyModal]);
 
   const handleSelectCondition = (condition: string) => {
-    localStorage.setItem('cobytartil_user_condition', condition);
+    localStorage.setItem('cobytartil_user_condition', condition === 'reguler' ? '' : condition);
     setUserCondition(condition);
     setShowCobyModal(false);
     
     let ucapan = "";
-    if (condition === 'tunanetra') ucapan = "Tuna Netra. Mode suara penuh aktif. Aplikasi sudah disesuaikan.";
-    else if (condition === 'tunarungu') ucapan = "Tuna Rungu atau Wicara. Mode visual interaktif aktif.";
+    if (condition === 'tuna_netra') ucapan = "Tuna Netra. Mode suara penuh aktif. Aplikasi sudah disesuaikan.";
+    else if (condition === 'tuna_rungu_wicara') ucapan = "Tuna Rungu atau Wicara. Mode visual interaktif aktif.";
     else ucapan = "Reguler. Selamat belajar bersama Coby!";
 
     const msg = new SpeechSynthesisUtterance(`Kamu memilih mode ${ucapan}`);
@@ -77,7 +114,7 @@ function App() {
     const handleKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') return;
       const condition = localStorage.getItem('cobytartil_user_condition');
-      if (condition && condition !== 'tunanetra') return;
+      if (condition && condition !== 'tuna_netra') return;
 
       if (e.key === 'h' || e.key === 'H') {
         window.speechSynthesis.cancel();
@@ -101,7 +138,7 @@ function App() {
       if (!isInteractive && !isFocusable) return;
 
       const condition = localStorage.getItem('cobytartil_user_condition');
-      if (condition && condition !== 'tunanetra') return;
+      if (condition && condition !== 'tuna_netra') return;
 
       if ((window as any).isCobyIntroPlaying) return;
 
@@ -161,16 +198,13 @@ function App() {
               <img src='/logo.png' alt="CobyTartil Logo" className="w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
               <span className="text-2xl font-bold tracking-tighter text-white font-headline">CobyTartil</span>
             </div>
-            <div className="items-center hidden gap-8 md:flex">
+            <div className="items-center hidden gap-8 lg:flex">
               <a className="Lexend editorial scale text-lg font-medium tracking-tight text-[#eec800] font-semibold border-b-2 border-[#ffd700] pb-1 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" href="#fitur-section" aria-current="page">Fitur</a>
               <a className="Lexend editorial scale text-lg font-medium tracking-tight text-white/90 hover:text-[#ffd700] transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" href="#cara-belajar">Cara Belajar</a>
               <a className="Lexend editorial scale text-lg font-medium tracking-tight text-white/90 hover:text-[#ffd700] transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" href="#tentang">Tentang</a>
               <a className="Lexend editorial scale text-lg font-medium tracking-tight text-white/90 hover:text-[#ffd700] transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" href="#kontak">Kontak</a>
             </div>
-            <div className="flex items-center gap-4">
-              <button onClick={() => navigate({ to: '/register' })} className="px-6 py-2 rounded-full text-red-900 font-medium bg-[#ffd700] hover:bg-[#ffd700]/70 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" aria-label="Masuk ke dashboard siswa">Daftar</button>
-              <button onClick={() => navigate({ to: '/login' })} className="px-6 py-2 rounded-full border border-outline-variant/40 text-white font-medium hover:bg-white/10 transition-all focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" aria-label="Masuk ke dashboard siswa">Masuk</button>
-            </div>
+            <AuthNav />
           </div>
         </nav>
       </header>
@@ -378,11 +412,11 @@ function App() {
               
               <div className="flex flex-col gap-4">
                 <button 
-                  onClick={() => handleSelectCondition('tunanetra')}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 group flex items-center gap-5 ${userCondition === 'tunanetra' ? 'border-[#800000] bg-red-50 shadow-md transform scale-[1.02]' : 'border-red-50 hover:border-red-200 hover:bg-red-50/30 bg-red-50/10'}`}
+                  onClick={() => handleSelectCondition('tuna_netra')}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 group flex items-center gap-5 ${userCondition === 'tuna_netra' ? 'border-[#800000] bg-red-50 shadow-md transform scale-[1.02]' : 'border-red-50 hover:border-red-200 hover:bg-red-50/30 bg-red-50/10'}`}
                   aria-label="Saya Tuna Netra"
                 >
-                  <div className={`p-3 rounded-full transition-colors ${userCondition === 'tunanetra' ? 'bg-[#800000] text-white' : 'bg-red-100 text-[#800000] group-hover:bg-red-200'}`}>
+                  <div className={`p-3 rounded-full transition-colors ${userCondition === 'tuna_netra' ? 'bg-[#800000] text-white' : 'bg-red-100 text-[#800000] group-hover:bg-red-200'}`}>
                     <span className="text-xl material-symbols-outlined" aria-hidden="true">blind</span>
                   </div>
                   <div>
@@ -392,11 +426,11 @@ function App() {
                 </button>
 
                 <button 
-                  onClick={() => handleSelectCondition('tunarungu')}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 group flex items-center gap-5 ${userCondition === 'tunarungu' ? 'border-[#800000] bg-red-50 shadow-md transform scale-[1.02]' : 'border-red-50 hover:border-red-200 hover:bg-red-50/30 bg-red-50/10'}`}
+                  onClick={() => handleSelectCondition('tuna_rungu_wicara')}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 group flex items-center gap-5 ${userCondition === 'tuna_rungu_wicara' ? 'border-[#800000] bg-red-50 shadow-md transform scale-[1.02]' : 'border-red-50 hover:border-red-200 hover:bg-red-50/30 bg-red-50/10'}`}
                   aria-label="Saya Tuna Rungu atau Tuna Wicara"
                 >
-                  <div className={`p-3 rounded-full transition-colors ${userCondition === 'tunarungu' ? 'bg-[#800000] text-white' : 'bg-red-100 text-[#800000] group-hover:bg-red-200'}`}>
+                  <div className={`p-3 rounded-full transition-colors ${userCondition === 'tuna_rungu_wicara' ? 'bg-[#800000] text-white' : 'bg-red-100 text-[#800000] group-hover:bg-red-200'}`}>
                     <span className="text-xl material-symbols-outlined" aria-hidden="true">sign_language</span>
                   </div>
                   <div>

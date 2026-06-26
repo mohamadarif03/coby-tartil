@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getToken } from '@/libs/token-handler'
-import { useAuthStore } from '@/store/auth-store'
+import { useAuthStore } from '@/stores/auth-store'
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL,

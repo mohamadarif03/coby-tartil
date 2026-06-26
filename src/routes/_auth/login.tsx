@@ -1,20 +1,23 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import React, { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginType } from '@/validations/auth-schema';
+import { useLogin } from '@/hooks/use-auth-fetch';
 
 export const Route = createFileRoute('/_auth/login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginType>({
+    resolver: zodResolver(loginSchema),
+  });
+  const { trigger: login, isMutating } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate({ to: '/siswa' });
+  const onSubmit = (data: LoginType) => {
+    login(data);
   };
 
   return (
@@ -26,7 +29,7 @@ function RouteComponent() {
         <h2 className="text-3xl font-bold text-[#4d0000] mb-2 font-headline">Masuk</h2>
         <p className="text-[#800000]/70 mb-8 text-base">Masuk ke akunmu untuk melanjutkan belajar</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
             <label htmlFor="login-email" className="block text-sm font-bold text-[#4d0000] mb-2 font-['Plus_Jakarta_Sans']">
             Email
@@ -36,13 +39,16 @@ function RouteComponent() {
             <input
                 id="login-email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register('email')}
                 placeholder="contoh@email.com"
-                required
-                className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-red-100 rounded-xl text-[#2a2f32] placeholder-[#800000]/30 focus:border-[#800000] focus:ring-4 focus:ring-[#ffd700]/20 focus:outline-none transition-all font-['Plus_Jakarta_Sans']"
+                className={`w-full pl-12 pr-4 py-3.5 bg-white border-2 rounded-xl text-[#2a2f32] placeholder-[#800000]/30 focus:outline-none transition-all font-['Plus_Jakarta_Sans'] ${
+                  errors.email ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-200' : 'border-red-100 focus:border-[#800000] focus:ring-4 focus:ring-[#ffd700]/20'
+                }`}
             />
             </div>
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1.5 font-medium font-['Plus_Jakarta_Sans']">{errors.email.message}</p>
+            )}
         </div>
 
         <div>
@@ -54,13 +60,16 @@ function RouteComponent() {
             <input
                 id="login-password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password')}
                 placeholder="Masukkan kata sandi"
-                required
-                className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-red-100 rounded-xl text-[#2a2f32] placeholder-[#800000]/30 focus:border-[#800000] focus:ring-4 focus:ring-[#ffd700]/20 focus:outline-none transition-all font-['Plus_Jakarta_Sans']"
+                className={`w-full pl-12 pr-4 py-3.5 bg-white border-2 rounded-xl text-[#2a2f32] placeholder-[#800000]/30 focus:outline-none transition-all font-['Plus_Jakarta_Sans'] ${
+                  errors.password ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-200' : 'border-red-100 focus:border-[#800000] focus:ring-4 focus:ring-[#ffd700]/20'
+                }`}
             />
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1.5 font-medium font-['Plus_Jakarta_Sans']">{errors.password.message}</p>
+            )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -78,9 +87,21 @@ function RouteComponent() {
 
         <button
             type="submit"
-            className="w-full py-4 bg-gradient-to-br from-[#800000] to-[#690000] text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-[#800000]/30 transition-all active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 font-['Plus_Jakarta_Sans']"
+            disabled={isMutating}
+            className={`w-full py-4 text-white font-bold text-lg rounded-xl shadow-lg transition-all active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 font-['Plus_Jakarta_Sans'] ${
+              isMutating
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-br from-[#800000] to-[#690000] hover:shadow-[#800000]/30'
+            }`}
         >
-            Masuk
+          {isMutating ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Memproses...
+            </span>
+          ) : (
+            'Masuk'
+          )}
         </button>
         </form>
 
@@ -90,6 +111,12 @@ function RouteComponent() {
             Daftar Sekarang
         </Link>
         </p>
+
+        <div className="mt-6 text-center">
+          <Link to='/siswa' className="text-sm text-[#800000]/50 hover:text-[#800000] underline underline-offset-4 transition-colors font-['Plus_Jakarta_Sans'] focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 rounded">
+            Lewati, masuk sebagai tamu
+          </Link>
+        </div>
     </div>
   );
 }

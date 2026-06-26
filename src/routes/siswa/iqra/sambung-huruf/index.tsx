@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/iqra/sambung-huruf/')({
+  beforeLoad: requireStudentRole,
   component: IqraSambungHuruf,
 })
 
@@ -51,7 +53,7 @@ function IqraSambungHuruf() {
     <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body siswa-headline flex">
       <Sidebar activeMenu="iqra" />
 
-      <main className="w-full p-6 pb-32 ml-72 md:p-10" id="main-content" role="main">
+      <main className="w-full p-6 pb-32 ml-0 lg:ml-72 md:p-10" id="main-content" role="main">
         <div className="max-w-5xl mx-auto">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="flex items-center mb-8 space-x-2 text-sm font-medium text-slate-500">

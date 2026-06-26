@@ -2,8 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/ayat-pendek/isyarat/$surah/')({
+  beforeLoad: requireStudentRole,
   component: DetailAyatIsyarat,
 })
 
@@ -204,7 +206,7 @@ function DetailAyatIsyarat () {
         <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body flex">
             <Sidebar activeMenu="short-verses" />
 
-            <main className="w-full p-6 pb-32 ml-72 md:p-12" id="main-content" role="main">
+            <main className="w-full p-6 pb-32 ml-0 lg:ml-72 md:p-12" id="main-content" role="main">
                 {/* Breadcrumb */}
                 <nav className="mb-8 flex items-center gap-2 text-sm text-[#575c60] font-medium">
                     <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex="0">Beranda</span>

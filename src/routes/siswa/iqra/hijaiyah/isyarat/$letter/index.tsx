@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/iqra/hijaiyah/isyarat/$letter/')({
+  beforeLoad: requireStudentRole,
   component: DetailHijaiyahIsyarat,
 })
 
@@ -112,7 +114,7 @@ function DetailHijaiyahIsyarat() {
             <Sidebar activeMenu="iqra" />
 
             {/* Main Content Area */}
-            <main className="w-full p-6 pb-32 ml-72 md:p-12" id="main-content" role="main">
+            <main className="w-full p-6 pb-32 ml-0 lg:ml-72 md:p-12" id="main-content" role="main">
                 {/* Breadcrumb */}
                 <nav className="mb-8 flex items-center gap-2 text-sm text-[#575c60] font-medium">
                     <span onClick={() => navigate({ to: '/siswa' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex={0}>Beranda</span>

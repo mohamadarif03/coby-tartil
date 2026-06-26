@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/menulis-hijaiyah/')({
+  beforeLoad: requireStudentRole,
   component: MenulisHijaiyah,
 })
 
@@ -272,7 +274,7 @@ function MenulisHijaiyah() {
     <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen flex">
       <Sidebar activeMenu="menulis-hijaiyah" />
 
-      <main className="w-full p-8 ml-72 lg:p-12" id="main-content" role="main">
+      <main className="w-full p-8 ml-0 lg:ml-72 lg:p-12" id="main-content" role="main">
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>

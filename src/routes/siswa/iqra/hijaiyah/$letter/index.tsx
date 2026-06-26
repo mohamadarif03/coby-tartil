@@ -3,8 +3,10 @@ import React from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import useAccessibility from '@/hooks/use-accessibility';
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/iqra/hijaiyah/$letter/')({
+  beforeLoad: requireStudentRole,
   component: DetailHijaiyah,
 })
 
@@ -24,7 +26,7 @@ function DetailHijaiyah() {
       <Sidebar activeMenu="iqra" />
 
       {/* Main Content Area */}
-      <main className="w-full p-6 pb-32 ml-72 md:p-12" id="main-content" role="main">
+      <main className="w-full p-6 pb-32 ml-0 lg:ml-72 md:p-12" id="main-content" role="main">
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb */}
           <nav className="mb-8 flex items-center gap-2 text-sm font-medium text-[#575c60]">

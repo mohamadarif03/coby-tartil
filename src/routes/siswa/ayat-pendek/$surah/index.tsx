@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/ayat-pendek/$surah/')({
+  beforeLoad: requireStudentRole,
   component: DetailAyat,
 })
 
@@ -132,7 +134,7 @@ function DetailAyat() {
       <Sidebar activeMenu="short-verses" />
 
       {/* Main Content */}
-      <main className="relative flex flex-col flex-1 w-full min-h-screen p-8 overflow-hidden ml-72 lg:p-12" id="main-content" role="main">
+      <main className="relative flex flex-col flex-1 w-full min-h-screen p-8 overflow-hidden ml-0 lg:ml-72 lg:p-12" id="main-content" role="main">
         
         {/* TOP APP BAR */}
         <header className="flex items-center justify-between w-full mb-12">

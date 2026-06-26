@@ -3,8 +3,10 @@ import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import Sidebar from '@/components/layouts/Sidebar';
 import useAccessibility from '@/hooks/use-accessibility';
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/')({
+  beforeLoad: requireStudentRole,
   component: Siswa,
 })
 
@@ -18,7 +20,7 @@ function Siswa() {
       <Sidebar activeMenu="home" />
 
       {/* Main Content Area */}
-      <main className="w-full p-8 ml-72 lg:p-12" id="main-content" role="main">
+      <main className="w-full p-8 ml-0 lg:ml-72 lg:p-12" id="main-content" role="main">
         <header className="flex items-center justify-between mb-12">
           <div>
             <h2 className="text-4xl font-black text-[#800000] tracking-tight mb-2">Halo, Ahmad! 👋</h2>

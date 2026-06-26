@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/ayat-pendek/')({
+  beforeLoad: requireStudentRole,
   component: AyatPendek,
 })
 
@@ -18,7 +20,7 @@ function AyatPendek() {
       <Sidebar activeMenu="short-verses" />
 
       {/* Main Content Area */}
-      <main className="ml-72 p-8 lg:p-12 w-full relative overflow-hidden flex flex-col min-h-screen" id="main-content" role="main"> {/* ADDED */}
+      <main className="ml-0 lg:ml-72 p-8 lg:p-12 w-full relative overflow-hidden flex flex-col min-h-screen" id="main-content" role="main"> {/* ADDED */}
         {/* Subtle Background Motif */}
         <div className="absolute inset-0 arabesque-pattern pointer-events-none"></div>
 

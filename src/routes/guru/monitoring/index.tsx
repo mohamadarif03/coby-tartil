@@ -1,27 +1,32 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { requireTeacherRole } from '@/libs/route-guards'
 import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import Sidebar from '@/components/layouts/Sidebar';
 import useAccessibility from '@/hooks/use-accessibility';
-import { StudentPlaceholders } from '@/consts/students-placeholder';
+import { STUDENT } from '@/consts/api-url';
+import { useQueryData } from '@/hooks/use-global-fetch';
+import type { Student } from '@/types/teacher-type';
 import AddStudentModal from './-components/add-student-modal';
 
-
 export const Route = createFileRoute('/guru/monitoring/')({
+  beforeLoad: requireTeacherRole,
   component: GuruMonitoring,
 })
-
 
 function GuruMonitoring() {
   useAccessibility('Monitoring Siswa');
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { data: studentsRes, isLoading } = useQueryData<Student>(STUDENT.GET);
+  const students = studentsRes?.data;
+
   return (
     <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body siswa-headline flex">
       <Sidebar activeMenu="Monitoring" role="teacher" />
 
-      <main className="w-full p-8 ml-72 lg:p-12" id="main-content" role="main">
+      <main className="w-full p-8 ml-0 lg:ml-72 lg:p-12" id="main-content" role="main">
         <header className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-4xl font-black text-[#800000] tracking-tight mb-2">Monitoring Siswa</h2>
@@ -37,55 +42,68 @@ function GuruMonitoring() {
         </header>
 
         <div className="bg-[#ffffff] rounded-xl shadow-sm border border-[#a9aeb1]/10 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-[#f3f7fb] border-b border-[#ecf1f6]">
-                  <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Siswa</th>
-                  <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Email</th>
-                  <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Modul</th>
-                  <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Tipe</th>
-                  <th className="text-right py-4 px-6 text-sm font-bold text-[#575c60]">Progress</th>
-                </tr>
-              </thead>
-              <tbody>
-                {StudentPlaceholders.map((student) => (
-                  <tr
-                    key={student.id}
-                    onClick={() => navigate({to : '/guru/monitoring/$studentId', params : { studentId : String(student.id) } })}
-                    className="border-b border-[#ecf1f6] last:border-b-0 hover:bg-[#f3f7fb] transition-colors cursor-pointer"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#800000]/10 text-[#800000] flex items-center justify-center font-bold text-sm">
-                          {student.avatar}
-                        </div>
-                        <span className="font-bold text-[#2a2f32]">{student.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 text-sm text-[#575c60]">{student.email}</td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-medium text-[#2a2f32]">{student.module}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-medium px-3 py-1 rounded-full bg-[#800000]/5 text-[#800000]">{student.type}</span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <div className="w-24 h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-[#800000] rounded-full"
-                            style={{ width: `${student.progress}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-sm font-bold text-[#800000] min-w-[40px]">{student.progress}%</span>
-                      </div>
-                    </td>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-24">
+              <span className="inline-block w-8 h-8 border-2 border-[#800000]/30 border-t-[#800000] rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-[#f3f7fb] border-b border-[#ecf1f6]">
+                    <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Siswa</th>
+                    <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Email</th>
+                    <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Modul</th>
+                    <th className="text-left py-4 px-6 text-sm font-bold text-[#575c60]">Tipe</th>
+                    <th className="text-right py-4 px-6 text-sm font-bold text-[#575c60]">Progress</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {(students ?? []).map((student) => (
+                    <tr
+                      key={student.id}
+                      onClick={() => navigate({to : '/guru/monitoring/$studentId', params : { studentId : String(student.id) } })}
+                      className="border-b border-[#ecf1f6] last:border-b-0 hover:bg-[#f3f7fb] transition-colors cursor-pointer"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-full bg-[#800000]/10 text-[#800000] flex items-center justify-center font-bold text-sm">
+                            {student.avatar ?? student.name.charAt(0).toUpperCase()}
+                          </div>
+                          <span className="font-bold text-[#2a2f32]">{student.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 text-sm text-[#575c60]">{student.email}</td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-medium text-[#2a2f32]">{student.module}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-medium px-3 py-1 rounded-full bg-[#800000]/5 text-[#800000]">{student.type}</span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <div className="w-24 h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-[#800000] rounded-full"
+                              style={{ width: `${student.progress}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-bold text-[#800000] min-w-[40px]">{student.progress}%</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {(!students || students.length === 0) && (
+                    <tr>
+                      <td colSpan={5} className="text-center py-16 text-[#575c60] font-medium">
+                        Belum ada data siswa
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </main>
 

@@ -3,8 +3,10 @@ import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import Sidebar from '@/components/layouts/Sidebar';
 import useAccessibility from '@/hooks/use-accessibility';
+import { requireStudentRole } from '@/libs/route-guards'
 
 export const Route = createFileRoute('/siswa/iqra/')({
+  beforeLoad: requireStudentRole,
   component: Iqra,
 })
 
@@ -106,7 +108,7 @@ function Iqra() {
     <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body siswa-headline flex">
       <Sidebar activeMenu="iqra" />
 
-      <main className="w-full p-10 mx-auto ml-72 max-w-7xl" id="main-content" role="main">
+      <main className="w-full p-10 mx-auto ml-0 lg:ml-72 max-w-7xl" id="main-content" role="main">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center mb-8 space-x-2 text-sm font-medium text-slate-500">
           <a className="hover:text-[#800000] transition-colors" href="#" onClick={(e) => { e.preventDefault(); navigate({ to: '/siswa' }); }}>Beranda</a>
