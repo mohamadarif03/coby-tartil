@@ -147,15 +147,15 @@ function RouteComponent() {
               {...register('password_confirmation')}
               placeholder="Ulangi kata sandi"
               className={`w-full pl-12 pr-4 py-3.5 bg-white border-2 rounded-xl text-[#2a2f32] placeholder-[#800000]/30 focus:outline-none transition-all font-['Plus_Jakarta_Sans'] ${
-                errors.password_confirmation || errors.confirm_password
+                errors.password_confirmation
                   ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-200'
                   : 'border-red-100 focus:border-[#800000] focus:ring-4 focus:ring-[#ffd700]/20'
               }`}
             />
           </div>
-          {(errors.password_confirmation || errors.confirm_password) && (
+          {(errors.password_confirmation) && (
             <p className="text-red-500 text-xs mt-1.5 font-medium font-['Plus_Jakarta_Sans']">
-              {(errors.password_confirmation?.message || errors.confirm_password?.message) as string}
+              {(errors.password_confirmation?.message) as string}
             </p>
           )}
         </div>
@@ -171,7 +171,7 @@ function RouteComponent() {
         >
           {isMutating ? (
             <span className="flex items-center justify-center gap-2">
-              <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="inline-block w-5 h-5 border-2 rounded-full border-white/30 border-t-white animate-spin" />
               Memproses...
             </span>
           ) : (

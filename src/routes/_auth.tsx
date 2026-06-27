@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { redirectAuthenticatedUser } from '@/libs/route-guards'
+import { APP_TITLE } from '@/consts/config'
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: redirectAuthenticatedUser,
@@ -23,7 +24,7 @@ function Auth() {
         <div className="absolute top-6 left-8 md:hidden">
           <div className="flex items-center gap-2">
             <img src='/maskot.png' alt="" className="object-contain h-10" />
-            <span className="text-xl font-bold text-[#800000] font-headline tracking-tighter">CobyTartil</span>
+            <span className="text-xl font-bold text-[#800000] font-headline tracking-tighter">{APP_TITLE}</span>
           </div>
         </div>
 

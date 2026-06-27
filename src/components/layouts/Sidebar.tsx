@@ -5,6 +5,7 @@ import { useLogout } from '@/hooks/use-auth-fetch';
 import { ROLE } from '@/enums/roles-enum';
 import { StudentSidebarDatas, TeacherSidebarDatas } from '@/consts/sidebar-data';
 import { SidebarType } from '@/types/sidebar-type';
+import { APP_TITLE } from '@/consts/config';
 
 interface SidebarProps {
   activeMenu: string;
@@ -85,11 +86,11 @@ function Sidebar({ activeMenu, role = 'student' }: SidebarProps) {
               onClick={() => { navigate({ to: '/' }); closeSidebar(); }}
               tabIndex={0}
               role="link"
-              aria-label="Kembali ke halaman utama CobyTartil"
+              aria-label={`Kembali ke halaman utama ${APP_TITLE}`}
             >
               <img src='/logo.png' alt="Logo" className="object-contain w-12 h-12" />
               <div className="flex flex-col">
-                <h1 className="text-2xl font-black text-white tracking-tighter focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">CobyTartil</h1>
+                <h1 className="text-2xl font-black text-white tracking-tighter focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2">{APP_TITLE}</h1>
                 <p className="text-xs font-['Plus_Jakarta_Sans'] text-white/70 font-bold opacity-80">Arabic Sandbox</p>
               </div>
             </div>

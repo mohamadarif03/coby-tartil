@@ -28,11 +28,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             // For validate (/auth/me): payload is directly in data.data
             const payload = data?.data
             set({ isAuthenticated: true, role: payload?.role, user: payload, disability: payload?.disability_type })
+            // Sync user condition from backend to localStorage
+            localStorage.setItem('cobytartil_user_condition', payload?.disability_type ?? '');
         } else {
             // For login: the data field contains { user, token }
             const payload = data?.data?.user
             set({ isAuthenticated: true, role: payload?.role, user: payload, disability: payload?.disability_type })
             setToken(data?.data?.access_token || '')
+            // Sync user condition from backend to localStorage
+            localStorage.setItem('cobytartil_user_condition', payload?.disability_type ?? '');
         }
     },
     logout: () => {

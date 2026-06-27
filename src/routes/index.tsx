@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Outlet } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/auth-store'
 import { ROLE } from '@/enums/roles-enum'
+import { APP_TITLE } from '@/consts/config'
 import '@/index.css';
 import { useLogout } from '@/hooks/use-auth-fetch';
 
@@ -119,7 +120,7 @@ function App() {
       if (e.key === 'h' || e.key === 'H') {
         window.speechSynthesis.cancel();
         const help = new SpeechSynthesisUtterance(
-          `Kamu ada di halaman utama CobyTartil. Gunakan Tab untuk berpindah antar tombol. Tekan Enter untuk memilih. Tekan H kapanpun butuh bantuan.`
+          `Kamu ada di halaman utama ${APP_TITLE}. Gunakan Tab untuk berpindah antar tombol. Tekan Enter untuk memilih. Tekan H kapanpun butuh bantuan.`
         );
         help.lang = 'id-ID';
         help.rate = 0.85;
@@ -195,8 +196,8 @@ function App() {
         <nav className="fixed top-0 z-50 w-full transition-colors duration-300 border-b bg-black/10 backdrop-blur-md border-white/10" aria-label="Navigasi Utama">
           <div className="flex items-center justify-between px-8 py-6 mx-auto max-w-7xl">
             <div className="flex items-center gap-3">
-              <img src='/logo.png' alt="CobyTartil Logo" className="w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
-              <span className="text-2xl font-bold tracking-tighter text-white font-headline">CobyTartil</span>
+              <img src='/logo.png' alt={`${APP_TITLE} Logo`} className="w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+              <span className="text-2xl font-bold tracking-tighter text-white font-headline">{APP_TITLE}</span>
             </div>
             <div className="items-center hidden gap-8 lg:flex">
               <a className="Lexend editorial scale text-lg font-medium tracking-tight text-[#eec800] font-semibold border-b-2 border-[#ffd700] pb-1 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2" href="#fitur-section" aria-current="page">Fitur</a>
@@ -334,7 +335,7 @@ function App() {
               <div className="relative overflow-hidden transition-all duration-500 shadow-lg md:col-span-2 rounded-2xl group hover:shadow-2xl">
                 <img
                   className="object-cover w-full transition-transform duration-700 h-72 group-hover:scale-110"
-                  alt="Tampilan desain aplikasi CobyTartil yang minimalis dan aksesibel"
+                  alt={`Tampilan desain aplikasi ${APP_TITLE} yang minimalis dan aksesibel`}
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF5nXtcCgteEr0SjgLVHkwxWfq2S2EACI7gVGooiekn9MLXJEL4uh83rbRt-4rIy2bIsRQJEi5OqzyGmB8mFZQ2Ri_vr88JZVmqDawVpaDfLULkGfYA6qy16RAhwR7k1h8s6wAFp5zF_a7-MGadT4wvW6HwpCqe13yMVzXDVRhc0LuRtaJN4O0lNYqBFlZfOl7TpXQ80obda-6vGI6UzAXMWrYpv1VsXHuy5aH5TtFvXjHtPLKayQvHe93JAxUFAz4Vwoa7bkh62A"
                 />
                 <div className="absolute inset-0 flex items-end p-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" aria-hidden="true">
@@ -347,7 +348,7 @@ function App() {
           </section>
 
           <section className="relative py-16 mt-20 overflow-hidden bg-white border-red-100 shadow-sm border-y" aria-labelledby="stats-heading">
-            <h2 id="stats-heading" className="sr-only">Statistik Dampak CobyTartil</h2>
+            <h2 id="stats-heading" className="sr-only">Statistik Dampak {APP_TITLE}</h2>
             <div className="absolute inset-0 hero-pattern opacity-[0.03]" aria-hidden="true"></div>
             <div className="relative z-10 grid grid-cols-2 gap-12 px-8 mx-auto text-center max-w-7xl md:grid-cols-4">
               <div>
@@ -373,7 +374,7 @@ function App() {
         <section className="relative z-10 flex flex-col items-center px-8 py-32 text-center text-white" aria-labelledby="quote-heading" id="tentang">
           <div className="w-16 h-1 bg-[#ffd700] mb-12" aria-hidden="true"></div>
           <h2 id="quote-heading" className="max-w-4xl text-3xl italic font-bold leading-tight md:text-5xl font-headline">
-            "Digitalisasi pendidikan agama tidak harus mengorbankan sakralitasnya. CobyTartil adalah jembatan antara tradisi dan masa depan."
+            `Digitalisasi pendidikan agama tidak harus mengorbankan sakralitasnya. ${APP_TITLE} adalah jembatan antara tradisi dan masa depan.`
           </h2>
           <p className="mt-8 text-sm font-medium tracking-widest uppercase text-white/80">— Dr. Ahmad Fauzi, Dewan Penasihat Syariah</p>
         </section>
@@ -471,10 +472,9 @@ function App() {
 
       <footer className="w-full rounded-t-[3rem] mt-20 bg-[#4d0000] dark:bg-[#4d0000]" role="contentinfo">
         <div className="flex flex-col items-center justify-between w-full px-12 py-16 mx-auto md:flex-row max-w-7xl">
-          <div className="mb-8 md:mb-0">
-            <span className="text-xl font-bold text-[#ffd700] font-headline">CobyTartil</span>
-            <p className="Lexend body-lg line-height-1.6 mt-4 text-red-100/60 max-w-xs">
-              © 2024 CobyTartil. Dedicated to accessible spiritual growth.
+          <div className="mb-8 md:mb-0"><span className="text-xl font-bold text-[#ffd700] font-headline">{APP_TITLE}</span>
+              <p className="Lexend body-lg line-height-1.6 mt-4 text-red-100/60 max-w-xs">
+              © 2024 {APP_TITLE}. Dedicated to accessible spiritual growth.
             </p>
           </div>
           <nav className="flex flex-wrap justify-center gap-8 md:gap-12" aria-label="Navigasi Footer">
