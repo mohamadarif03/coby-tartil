@@ -1,7 +1,7 @@
 const refCache = new Map<string, Uint8Array>();
 const USER_THRESH = 0.82;
 const FONT_THRESH = 0.5;
-const MATCH_THRESHOLD = 0.45;
+const MATCH_THRESHOLD = 0.3;
 const MIN_INK = 30;
 
 function toBinary(

@@ -17,7 +17,7 @@ const HIJAIYAH_LETTERS = [
   { letter: 'ت', name: 'Ta' },
   { letter: 'ث', name: 'Tsa' },
   { letter: 'ج', name: 'Jim' },
-  { letter: 'ح', name: 'Ha' },
+  { letter: 'ح', name: "Ha'" },
   { letter: 'خ', name: 'Kha' },
   { letter: 'د', name: 'Dal' },
   { letter: 'ذ', name: 'Dzal' },
@@ -305,18 +305,18 @@ function MenulisHijaiyah() {
                       setIsEraser(false);
                     }}
                     className={`relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 group focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-1 ${
-                      selectedLetter.name === item.name
+                      selectedLetter.letter === item.letter
                         ? 'bg-gradient-to-br from-[#800000] to-[#00897b] text-white shadow-lg shadow-[#800000]/30 scale-105'
                         : 'bg-[#f3f7fb] text-[#2a2f32] hover:bg-[#e0ecea] hover:scale-105'
                     }`}
                     aria-label={`Huruf ${item.name}`}
-                    aria-pressed={selectedLetter.name === item.name}
+                    aria-pressed={selectedLetter.letter === item.letter}
                   >
                     <span className="text-2xl font-bold leading-none" style={{ fontFamily: "'Noto Naskh Arabic', 'Amiri', serif" }}>
                       {item.letter}
                     </span>
                     <span className={`text-[9px] font-bold mt-1 tracking-wide ${
-                      selectedLetter.name === item.name ? 'text-white/80' : 'text-[#575c60]'
+                      selectedLetter.letter === item.letter ? 'text-white/80' : 'text-[#575c60]'
                     }`}>
                       {item.name}
                     </span>
