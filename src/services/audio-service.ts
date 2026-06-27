@@ -1,6 +1,6 @@
 const API_URL = 'https://crtal-cobytartil-audio-api.hf.space/transcribe';
 
-export async function transcribeAudio(blob) {
+export async function transcribeAudio(blob: Blob): Promise<string> {
   const form = new FormData();
   const audioBlob = new Blob([blob], { type: 'audio/webm' });
   form.append('file', audioBlob, 'recording.webm');

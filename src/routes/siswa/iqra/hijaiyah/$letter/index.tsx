@@ -1,19 +1,50 @@
 import { createFileRoute } from '@tanstack/react-router'
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import useAccessibility from '@/hooks/use-accessibility';
 import { requireStudentRole } from '@/libs/route-guards'
+import { useRecorder } from '@/hooks/use-recorder';
+import { transcribeAudio } from '@/services/audio-service';
+import { AudioVisualizer } from '@/components/AudioVisualizer';
 
 export const Route = createFileRoute('/siswa/iqra/hijaiyah/$letter/')({
   beforeLoad: requireStudentRole,
   component: DetailHijaiyah,
 })
 
+const LETTER = { arabic: 'ب', nameAr: 'باء' };
+const stripDiacritics = (s: string) => s.replace(/[ً-ٟؐ-ؚٰ]/g, '');
+
 function DetailHijaiyah() {
   const navigate = useNavigate();
   const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/$letter/' });
   useAccessibility(`Detail Huruf Hijaiyah ${letter}`);
+
+  const { isRecording, stream, start } = useRecorder();
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [speechResult, setSpeechResult] = useState<{ correct: boolean; transcript?: string; error?: boolean } | null>(null);
+
+  const handleBlob = async (blob: Blob) => {
+    setIsAnalyzing(true);
+    setSpeechResult(null);
+    try {
+      const transcript = await transcribeAudio(blob);
+      const clean = stripDiacritics(transcript);
+      const target = stripDiacritics(LETTER.nameAr);
+      setSpeechResult({ correct: clean.includes(target) || target.includes(clean), transcript });
+    } catch {
+      setSpeechResult({ correct: false, error: true });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const toggleListening = async () => {
+    if (isRecording || isAnalyzing) return;
+    setSpeechResult(null);
+    await start(handleBlob);
+  };
 
   // 2. Buat fungsi untuk memutar audio
   const playAudio = () => {
@@ -76,8 +107,15 @@ function DetailHijaiyah() {
                 <h2 className="text-2xl font-black text-[#2a2f32] mb-2 font-['Plus_Jakarta_Sans']">Sekarang Giliranmu!</h2>
                 <p className="text-[#575c60] mb-8 max-w-xs font-['Plus_Jakarta_Sans']">Tekan tombol, lalu ucapkan huruf ini</p>
                 <div className="flex flex-col items-center gap-6">
-                  <button aria-label="Mulai rekam suara" className="w-24 h-24 rounded-full bg-[#b31b25] flex items-center justify-center text-[#ffefee] shadow-lg hover:shadow-red-500/30 hover:scale-105 transition-all group active:ring-8 active:ring-red-500/20">
-                    <span className="text-4xl transition-transform material-symbols-outlined group-hover:scale-110">mic</span>
+                  <button
+                    aria-label={isRecording ? 'Berhenti merekam' : isAnalyzing ? 'Menganalisis...' : 'Mulai rekam suara'}
+                    onClick={toggleListening}
+                    disabled={isAnalyzing}
+                    className={`w-24 h-24 rounded-full flex items-center justify-center text-[#ffefee] shadow-lg hover:scale-105 transition-all group active:ring-8 active:ring-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed ${isRecording ? 'bg-red-600 animate-pulse' : 'bg-[#b31b25]'}`}
+                  >
+                    <span className="text-4xl transition-transform material-symbols-outlined group-hover:scale-110">
+                      {isRecording ? 'stop' : isAnalyzing ? 'hourglass_top' : 'mic'}
+                    </span>
                   </button>
                   {speechResult && (
                     <div className="text-center">
@@ -90,13 +128,8 @@ function DetailHijaiyah() {
                     </div>
                   )}
                   {/* Audio Wave Visualizer */}
-                  <div className="flex items-center h-8 gap-1 opacity-40">
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full"></div>
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full" style={{ animationDelay: '0.4s' }}></div>
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full" style={{ animationDelay: '0.3s' }}></div>
-                    <div className="audio-wave-bar w-1.5 bg-[#800000] rounded-full" style={{ animationDelay: '0.5s' }}></div>
+                  <div className="w-48 h-12">
+                    <AudioVisualizer stream={stream} />
                   </div>
                 </div>
                 <div className="mt-6 text-sm font-semibold text-[#800000] opacity-0" role="status">

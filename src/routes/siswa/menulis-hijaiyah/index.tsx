@@ -9,6 +9,7 @@ export const Route = createFileRoute('/siswa/menulis-hijaiyah/')({
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import useAccessibility from '@/hooks/use-accessibility';
+import { classifyCanvas } from '@/services/writing-service';
 
 const HIJAIYAH_LETTERS = [
   { letter: 'ا', name: 'Alif' },
@@ -439,6 +440,17 @@ function MenulisHijaiyah() {
                     aria-label="Hapus semua tulisan"
                   >
                     <span className="text-lg material-symbols-outlined" aria-hidden="true">delete</span>
+                  </button>
+
+                  {/* Check */}
+                  <button
+                    onClick={checkWriting}
+                    disabled={isChecking}
+                    className="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold bg-[#800000] text-white transition-all hover:bg-[#600000] disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#ffd700]"
+                    aria-label="Cek tulisan"
+                  >
+                    <span className="text-lg material-symbols-outlined" aria-hidden="true">{isChecking ? 'hourglass_top' : 'check'}</span>
+                    {isChecking ? 'Mengecek...' : 'Cek Tulisan'}
                   </button>
                 </div>
               </div>

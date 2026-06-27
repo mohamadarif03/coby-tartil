@@ -9,12 +9,13 @@ export const Route = createFileRoute('/siswa/ayat-pendek/$surah/')({
 import React, { useState, useRef } from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import useAccessibility from '@/hooks/use-accessibility'; // ADDED
-import { analyzeRecitation } from '@/services/gemini-service'; // AI Analysis
+import useAccessibility from '@/hooks/use-accessibility';
+import { useRecorder } from '@/hooks/use-recorder';
+import { transcribeAudio } from '@/services/audio-service';
 
 function DetailAyat() {
   const navigate = useNavigate();
-  const { surah } = useParams({ from: '/ayat-pendek/$surah' });
+  const { surah } = useParams({ from: '/siswa/ayat-pendek/$surah/' });
   useAccessibility('Detail Ayat'); // ADDED
 
   const verses = [
@@ -214,10 +215,8 @@ function DetailAyat() {
               </div>
               
               {/* FEEDBACK BUBBLE */}
-              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isAnalyzing ? 'border-yellow-300/50 animate-pulse' : aiResult && !aiResult.error ? 'border-[#800000]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
-                
+              <div className={`glass-bubble p-8 rounded-2xl shadow-xl border relative z-10 transition-all duration-500 ${isAnalyzing ? 'border-yellow-300/50 animate-pulse' : speechResult?.correct ? 'border-[#800000]/30' : 'border-[#dde3e8]/50 animate-bounce-subtle'}`}>
                 {isAnalyzing ? (
-                  // Loading state
                   <div className="flex flex-col items-center gap-3">
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-[#800000] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
@@ -227,51 +226,13 @@ function DetailAyat() {
                     <p className="text-[#800000] font-bold text-lg">Coby sedang mendengarkan... 🎧</p>
                   </div>
                 ) : (
-                  // Feedback content
                   <>
-                    <div className="flex gap-1 mb-3">
-                      {renderStars(displayRating)}
-                    </div>
-                    <p className="text-[#800000] font-bold text-lg leading-snug mb-2">
-                      {displayFeedback}
-                    </p>
-                    
-                    {/* Detail koreksi dari AI */}
-                    {aiResult && aiResult.details && aiResult.details.length > 0 && (
-                      <div className="mt-4 space-y-2">
-                        {aiResult.details.map((detail, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <span className="material-symbols-outlined text-sm text-[#ffc78e] mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>
-                              {aiResult.error ? 'info' : 'tips_and_updates'}
-                            </span>
-                            <p className="text-sm text-[#575c60] leading-relaxed">{detail}</p>
-                          </div>
-                        ))}
-                      </div>
+                    <p className="text-[#800000] font-bold text-lg leading-snug mb-2">{displayFeedback}</p>
+                    {speechResult?.transcript && (
+                      <p className="mt-3 text-xs text-[#575c60] italic">🎤 Terdengar: "{speechResult.transcript}"</p>
                     )}
-                    
-                    {/* Skor & Catatan Tajwid */}
-                    {aiResult && !aiResult.error && aiResult.pronunciationScore > 0 && (
-                      <div className="mt-4 pt-4 border-t border-[#dde3e8]">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-bold text-[#575c60] uppercase tracking-wider">Skor Pelafalan</span>
-                          <span className="text-lg font-black text-[#800000]">{aiResult.pronunciationScore}/100</span>
-                        </div>
-                        <div className="h-2 bg-[#ecf1f6] rounded-full overflow-hidden">
-                          <div 
-                            className="h-full transition-all duration-1000 rounded-full" 
-                            style={{ 
-                              width: `${aiResult.pronunciationScore}%`,
-                              backgroundColor: aiResult.pronunciationScore >= 80 ? '#800000' : aiResult.pronunciationScore >= 50 ? '#ffc78e' : '#ef4444' 
-                            }}
-                          ></div>
-                        </div>
-                        {aiResult.tajweedNotes && (
-                          <p className="mt-3 text-xs text-[#575c60] italic">
-                            📖 {aiResult.tajweedNotes}
-                          </p>
-                        )}
-                      </div>
+                    {speechResult?.error && (
+                      <p className="mt-2 text-xs text-red-500">Gagal mengenali suara. Coba lagi.</p>
                     )}
                   </>
                 )}
@@ -292,7 +253,7 @@ function DetailAyat() {
               </button>
               <button 
                 aria-label={isRecording ? 'Berhenti merekam suara' : isAnalyzing ? 'Menunggu analisis AI' : 'Mulai merekam bacaan'} 
-                onClick={toggleRecording}
+                onClick={toggleListening}
                 disabled={isAnalyzing}
                 className={`flex items-center gap-4 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:scale-105 transition-transform active:scale-95 focus:outline-none focus:ring-4 focus:ring-[#ffd700] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
                   isRecording 

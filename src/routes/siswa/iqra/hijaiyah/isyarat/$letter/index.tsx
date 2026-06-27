@@ -6,108 +6,16 @@ export const Route = createFileRoute('/siswa/iqra/hijaiyah/isyarat/$letter/')({
   component: DetailHijaiyahIsyarat,
 })
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Sidebar from '@/components/layouts/Sidebar';
 import { useNavigate, useParams } from '@tanstack/react-router';
-
-// Import MediaPipe from window since it is injected via CDN
-const { Hands, HAND_CONNECTIONS, Camera, drawConnectors, drawLandmarks } = window;
+import { useHandsign } from '@/hooks/use-handsign';
 
 function DetailHijaiyahIsyarat() {
     const navigate = useNavigate();
     const { letter } = useParams({ from: '/siswa/iqra/hijaiyah/isyarat/$letter/' });
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [statusMsg, setStatusMsg] = useState("Menyiapkan kamera...");
-    const lastUpdateRef = useRef(0);
-
-    useEffect(() => {
-        const videoElement = videoRef.current;
-        const canvasElement = canvasRef.current;
-        const canvasCtx = canvasElement.getContext('2d');
-
-        if (!window.Hands || !window.Camera) {
-            setStatusMsg("Memuat model kecerdasan buatan...");
-            setTimeout(() => setStatusMsg("Mohon muat ulang jika loading terlalu lama."), 5000);
-            return;
-        }
-
-        // Preload the ONNX model in the background
-        loadHandsignModel().catch(() => {
-            // ponytail: model may not exist yet (pre-training); fall back silently
-        });
-
-        const hands = new window.Hands({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-            }
-        });
-
-        hands.setOptions({
-            maxNumHands: 1,
-            modelComplexity: 0,   // must match training/01_extract_landmarks.py
-            minDetectionConfidence: 0.7,
-            minTrackingConfidence: 0.7
-        });
-
-        hands.onResults((results) => {
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-            // Draw camera feed mirrored
-            canvasCtx.translate(canvasElement.width, 0);
-            canvasCtx.scale(-1, 1);
-            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                for (const landmarks of results.multiHandLandmarks) {
-                    window.drawConnectors(canvasCtx, landmarks, window.HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 1 });
-                    window.drawLandmarks(canvasCtx, landmarks, { color: '#FF0000', lineWidth: 1, radius: 2 });
-
-                    const now = Date.now();
-                    if (now - lastUpdateRef.current < 1000) continue;
-                    lastUpdateRef.current = now;
-                    classifyLandmarks(landmarks, "ba").then((res) => {
-                        if (!res) return;
-                        if (res.correct) {
-                            setStatusMsg(`✅ Gestur Ba Terdeteksi! (${(res.confidence * 100).toFixed(0)}%)`);
-                        } else {
-                            setStatusMsg(`Terdeteksi: ${res.label} — coba lagi`);
-                        }
-                    }).catch(() => {
-                        // ponytail: model not yet trained; no-op
-                    });
-                }
-            } else {
-                setStatusMsg("Memindai gestur tangan...");
-            }
-            canvasCtx.restore();
-        });
-
-        const camera = new window.Camera(videoElement, {
-            onFrame: async () => {
-                if (!canvasElement) return;
-                // ponytail: only resize on dimension change, not every frame
-                if (canvasElement.width !== videoElement.videoWidth)
-                    canvasElement.width = videoElement.videoWidth;
-                if (canvasElement.height !== videoElement.videoHeight)
-                    canvasElement.height = videoElement.videoHeight;
-                await hands.send({ image: videoElement });
-            },
-            width: 320,
-            height: 240
-        });
-
-        camera.start().catch((err) => {
-            console.error(err);
-            setStatusMsg("Izin kamera ditolak");
-        });
-
-        return () => {
-            camera.stop();
-            hands.close();
-        };
-    }, []);
+    const { statusMsg, videoRef, canvasRef } = useHandsign(letter);
+    const displayLetter = letter.charAt(0).toUpperCase() + letter.slice(1);
 
     return (
         <div className="bg-[#f3f7fb] text-[#2a2f32] min-h-screen siswa-body flex">
@@ -123,7 +31,7 @@ function DetailHijaiyahIsyarat() {
                     <span className="text-sm material-symbols-outlined">chevron_right</span>
                     <span onClick={() => navigate({ to: '/siswa/iqra/hijaiyah' })} className="hover:text-[#800000] cursor-pointer transition-colors" tabIndex={0}>Hijaiyah</span>
                     <span className="text-sm material-symbols-outlined">chevron_right</span>
-                    <span className="text-[#800000] font-bold">Ba (Isyarat)</span>
+                    <span className="text-[#800000] font-bold">{displayLetter} (Isyarat)</span>
                 </nav>
 
                 <div className="grid items-start max-w-6xl grid-cols-1 gap-8 mx-auto lg:grid-cols-12">
@@ -135,8 +43,8 @@ function DetailHijaiyahIsyarat() {
                             <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#5de3fc]/20 rounded-full blur-3xl"></div>
                             <div className="relative z-10 w-full">
                                 <span className="block text-[120px] md:text-[140px] font-bold text-[#800000] leading-none font-['Noto_Sans_Arabic'] mb-4">ب</span>
-                                <h2 className="text-3xl font-black text-[#2a2f32] mt-4 font-['Plus_Jakarta_Sans']">Ba</h2>
-                                <p className="text-[#575c60] text-sm mt-1 font-medium font-['Plus_Jakarta_Sans']">Huruf Kedua Hijaiyah</p>
+                                <h2 className="text-3xl font-black text-[#2a2f32] mt-4 font-['Plus_Jakarta_Sans']">{displayLetter}</h2>
+                                <p className="text-[#575c60] text-sm mt-1 font-medium font-['Plus_Jakarta_Sans']">Huruf Hijaiyah</p>
                             </div>
                         </div>
 
@@ -149,10 +57,10 @@ function DetailHijaiyahIsyarat() {
                                 </div>
                             </div>
                             <div className="flex items-center justify-center p-6 bg-white rounded-lg shadow-sm aspect-square">
-                               <img alt="Visual 3D tangan menunjukkan isyarat huruf Ba bahasa Arab" className="object-contain w-full h-full transition-transform duration-500 cursor-pointer hover:scale-105" src='/img/hijaiyah/baa.png' />
+                               <img alt={`Visual 3D tangan menunjukkan isyarat huruf ${displayLetter}`} className="object-contain w-full h-full transition-transform duration-500 cursor-pointer hover:scale-105" src='/img/hijaiyah/baa.png' />
                             </div>
                             <p className="mt-6 text-[#575c60] text-sm leading-relaxed font-['Plus_Jakarta_Sans']">
-                                Posisikan tangan Anda sesuai panduan visual untuk melambangkan bentuk huruf <span className="font-bold text-[#800000]">Ba</span>.
+                                Posisikan tangan Anda sesuai panduan visual untuk melambangkan bentuk huruf <span className="font-bold text-[#800000]">{displayLetter}</span>.
                             </p>
                         </div>
                     </div>
@@ -165,7 +73,7 @@ function DetailHijaiyahIsyarat() {
                                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                                 <span className="text-[10px] font-bold text-white uppercase tracking-widest font-['Plus_Jakarta_Sans']">Live Recognition</span>
                             </div>
-                            
+
                             {/* Camera Visual */}
                             <div className="flex-1 bg-[#1c1c18] relative flex items-center justify-center overflow-hidden">
                                 <video ref={videoRef} className="hidden" autoPlay playsInline></video>
@@ -180,7 +88,7 @@ function DetailHijaiyahIsyarat() {
                                     <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-[#ffd700] rounded-br-lg"></div>
                                 </div>
                             </div>
-                            
+
                             {/* Status Bar */}
                             <div className="flex items-center justify-between p-6 bg-white border-t border-gray-100">
                                 <div className="flex items-center gap-4">
@@ -209,7 +117,7 @@ function DetailHijaiyahIsyarat() {
                                 Kembali
                             </button>
                             <button className="flex items-center gap-4 px-6 py-4 bg-[#800000] text-[#dbf8ff] font-black rounded-full transition-all hover:translate-x-2 shadow-lg shadow-[#800000]/20 w-2/3 justify-center font-['Plus_Jakarta_Sans']">
-                                Lanjut ke Huruf Ta
+                                Lanjut ke Huruf Berikutnya
                                 <span className="text-lg material-symbols-outlined">arrow_forward</span>
                             </button>
                         </div>
@@ -221,7 +129,7 @@ function DetailHijaiyahIsyarat() {
                     {/* Speech Bubble */}
                     <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-xl border border-[#800000]/10 max-w-[200px] relative mb-2 animate-bounce-slow">
                         <p className="text-[#800000] font-bold text-sm leading-relaxed text-center font-['Plus_Jakarta_Sans']">
-                            Coba praktekkan isyarat Ba ya! 🤲
+                            Coba praktekkan isyarat {displayLetter} ya! 🤲
                         </p>
                         {/* Tail */}
                         <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-r border-b border-[#800000]/10 rotate-45"></div>
